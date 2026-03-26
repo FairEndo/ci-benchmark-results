@@ -1,0 +1,53 @@
+{
+  "provider": "circleci",
+  "runner": "arm.large",
+  "timestamp": "2026-03-26T20:00:29Z",
+  "benchmarks": {
+    "cpu": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        1067.40,
+        1068.88,
+        1069.93,
+        1068.90,
+        1069.18
+      ],
+      "median": 1068.90,
+      "min": 1067.40,
+      "max": 1069.93,
+      "stddev": 0.82,
+      "unit": "events/sec"
+    },
+    "memory": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        3788.49,
+        3794.47,
+        3788.79,
+        3797.85,
+        3785.23
+      ],
+      "median": 3788.79,
+      "min": 3785.23,
+      "max": 3797.85,
+      "stddev": 4.55,
+      "unit": "MiB/sec"
+    }
+  },
+  "timing": {
+    "trigger_time": "2026-03-26T20:00:13.582Z",
+    "job_started_at": "2026-03-26T20:00:19Z",
+    "bench_started_at": "2026-03-26T20:00:29Z",
+    "queue_seconds": 6,
+    "setup_seconds": 10,
+    "total_seconds": 16
+  },
+  "system": {
+    "processor": "unknown",
+    "vcpus": 32,
+    "ram_mb": 16384,
+    "load_avg": "8.99, 9.16, 5.62"
+  }
+}
