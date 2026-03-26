@@ -26,13 +26,13 @@
         "scores": [
           5546.25,
           5666.01,
-          5735.40,
+          5735.4,
           5484.02,
           5573.25
         ],
         "median": 5573.25,
         "min": 5484.02,
-        "max": 5735.40,
+        "max": 5735.4,
         "stddev": 89.15,
         "unit": "MiB/sec"
       }
@@ -43,7 +43,9 @@
       "bench_started_at": "2026-03-26T20:00:58Z",
       "queue_seconds": 34,
       "setup_seconds": 11,
-      "total_seconds": 45
+      "total_seconds": 45,
+      "reported_duration": null,
+      "reported_queued": null
     },
     "system": {
       "processor": "Intel(R) Xeon(R) Platinum 8223CL CPU @ 3.00GHz",
@@ -77,7 +79,7 @@
         "tool": "sysbench",
         "iterations": 5,
         "scores": [
-          4999.70,
+          4999.7,
           4580.21,
           5433.37,
           5544.32,
@@ -96,7 +98,9 @@
       "bench_started_at": "2026-03-26T20:00:47Z",
       "queue_seconds": 24,
       "setup_seconds": 10,
-      "total_seconds": 34
+      "total_seconds": 34,
+      "reported_duration": null,
+      "reported_queued": null
     },
     "system": {
       "processor": "Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz",
@@ -149,7 +153,9 @@
       "bench_started_at": "2026-03-26T20:00:41Z",
       "queue_seconds": 4,
       "setup_seconds": 24,
-      "total_seconds": 28
+      "total_seconds": 28,
+      "reported_duration": null,
+      "reported_queued": null
     },
     "system": {
       "processor": "AMD EPYC 7763 64-Core Processor",
@@ -184,13 +190,13 @@
         "iterations": 5,
         "scores": [
           5369.47,
-          5131.20,
-          5091.20,
+          5131.2,
+          5091.2,
           5482.56,
           5419.26
         ],
         "median": 5369.47,
-        "min": 5091.20,
+        "min": 5091.2,
         "max": 5482.56,
         "stddev": 157.77,
         "unit": "MiB/sec"
@@ -202,7 +208,9 @@
       "bench_started_at": "2026-03-26T20:00:38Z",
       "queue_seconds": 4,
       "setup_seconds": 21,
-      "total_seconds": 25
+      "total_seconds": 25,
+      "reported_duration": null,
+      "reported_queued": null
     },
     "system": {
       "processor": "Apple M1 (Virtual)",
@@ -255,7 +263,9 @@
       "bench_started_at": "2026-03-26T20:00:36Z",
       "queue_seconds": 5,
       "setup_seconds": 18,
-      "total_seconds": 23
+      "total_seconds": 23,
+      "reported_duration": null,
+      "reported_queued": null
     },
     "system": {
       "processor": "Intel(R) Xeon(R) Platinum 8370C CPU @ 2.80GHz",
@@ -308,7 +318,9 @@
       "bench_started_at": "2026-03-26T20:00:34Z",
       "queue_seconds": 5,
       "setup_seconds": 16,
-      "total_seconds": 21
+      "total_seconds": 21,
+      "reported_duration": null,
+      "reported_queued": null
     },
     "system": {
       "processor": "Apple M1 (Virtual)",
@@ -344,13 +356,13 @@
         "scores": [
           7049.77,
           7059.58,
-          7060.30,
+          7060.3,
           7057.12,
           7059.67
         ],
         "median": 7059.58,
         "min": 7049.77,
-        "max": 7060.30,
+        "max": 7060.3,
         "stddev": 3.91,
         "unit": "MiB/sec"
       }
@@ -361,7 +373,9 @@
       "bench_started_at": "2026-03-26T20:00:32Z",
       "queue_seconds": 6,
       "setup_seconds": 13,
-      "total_seconds": 19
+      "total_seconds": 19,
+      "reported_duration": null,
+      "reported_queued": null
     },
     "system": {
       "processor": "Intel(R) Xeon(R) Platinum 8370C CPU @ 2.80GHz",
@@ -379,14 +393,14 @@
         "tool": "sysbench",
         "iterations": 5,
         "scores": [
-          1067.40,
+          1067.4,
           1068.88,
           1069.93,
-          1068.90,
+          1068.9,
           1069.18
         ],
-        "median": 1068.90,
-        "min": 1067.40,
+        "median": 1068.9,
+        "min": 1067.4,
         "max": 1069.93,
         "stddev": 0.82,
         "unit": "events/sec"
@@ -414,7 +428,9 @@
       "bench_started_at": "2026-03-26T20:00:29Z",
       "queue_seconds": 6,
       "setup_seconds": 10,
-      "total_seconds": 16
+      "total_seconds": 16,
+      "reported_duration": null,
+      "reported_queued": null
     },
     "system": {
       "processor": "unknown",
@@ -449,13 +465,13 @@
         "iterations": 5,
         "scores": [
           5646.25,
-          5590.10,
-          5677.40,
+          5590.1,
+          5677.4,
           5751.81,
           5730.68
         ],
-        "median": 5677.40,
-        "min": 5590.10,
+        "median": 5677.4,
+        "min": 5590.1,
         "max": 5751.81,
         "stddev": 58.22,
         "unit": "MiB/sec"
@@ -467,7 +483,9 @@
       "bench_started_at": "2026-03-26T20:00:28Z",
       "queue_seconds": 4,
       "setup_seconds": 11,
-      "total_seconds": 15
+      "total_seconds": 15,
+      "reported_duration": null,
+      "reported_queued": null
     },
     "system": {
       "processor": "Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz",
@@ -489,9 +507,9 @@
           1068.13,
           1068.29,
           1070.71,
-          1068.60
+          1068.6
         ],
-        "median": 1068.60,
+        "median": 1068.6,
         "min": 1068.13,
         "max": 1070.71,
         "stddev": 0.94,
@@ -520,7 +538,9 @@
       "bench_started_at": "2026-03-26T20:00:28Z",
       "queue_seconds": 5,
       "setup_seconds": 10,
-      "total_seconds": 15
+      "total_seconds": 15,
+      "reported_duration": null,
+      "reported_queued": null
     },
     "system": {
       "processor": "unknown",
@@ -538,13 +558,13 @@
         "tool": "sysbench",
         "iterations": 5,
         "scores": [
-          415.40,
+          415.4,
           433.05,
           445.93,
           408.62,
           374.18
         ],
-        "median": 415.40,
+        "median": 415.4,
         "min": 374.18,
         "max": 445.93,
         "stddev": 24.45,
@@ -573,7 +593,9 @@
       "bench_started_at": "2026-03-26T19:48:12Z",
       "queue_seconds": 9,
       "setup_seconds": 9,
-      "total_seconds": 18
+      "total_seconds": 18,
+      "reported_duration": null,
+      "reported_queued": null
     },
     "system": {
       "processor": "Intel(R) Xeon(R) Platinum 8223CL CPU @ 3.00GHz",
@@ -607,13 +629,13 @@
         "tool": "sysbench",
         "iterations": 5,
         "scores": [
-          5352.00,
+          5352.0,
           5462.51,
           5473.15,
           5030.43,
           4305.33
         ],
-        "median": 5352.00,
+        "median": 5352.0,
         "min": 4305.33,
         "max": 5473.15,
         "stddev": 439.88,
@@ -626,7 +648,9 @@
       "bench_started_at": "2026-03-26T19:48:11Z",
       "queue_seconds": 7,
       "setup_seconds": 10,
-      "total_seconds": 17
+      "total_seconds": 17,
+      "reported_duration": null,
+      "reported_queued": null
     },
     "system": {
       "processor": "Intel(R) Xeon(R) Platinum 8223CL CPU @ 3.00GHz",
@@ -679,7 +703,9 @@
       "bench_started_at": "2026-03-26T19:48:08Z",
       "queue_seconds": 6,
       "setup_seconds": 8,
-      "total_seconds": 14
+      "total_seconds": 14,
+      "reported_duration": null,
+      "reported_queued": null
     },
     "system": {
       "processor": "Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz",
@@ -732,7 +758,9 @@
       "bench_started_at": "2026-03-26T19:48:08Z",
       "queue_seconds": 4,
       "setup_seconds": 10,
-      "total_seconds": 14
+      "total_seconds": 14,
+      "reported_duration": null,
+      "reported_queued": null
     },
     "system": {
       "processor": "unknown",
@@ -770,11 +798,11 @@
           3796.38,
           3790.36,
           3783.21,
-          3798.90
+          3798.9
         ],
         "median": 3790.36,
         "min": 3783.21,
-        "max": 3798.90,
+        "max": 3798.9,
         "stddev": 5.86,
         "unit": "MiB/sec"
       }
@@ -785,7 +813,9 @@
       "bench_started_at": "2026-03-26T19:48:07Z",
       "queue_seconds": 5,
       "setup_seconds": 8,
-      "total_seconds": 13
+      "total_seconds": 13,
+      "reported_duration": null,
+      "reported_queued": null
     },
     "system": {
       "processor": "unknown",
@@ -820,12 +850,12 @@
         "iterations": 5,
         "scores": [
           5742.43,
-          5654.80,
-          5499.50,
+          5654.8,
+          5499.5,
           4458.21,
           4593.32
         ],
-        "median": 5499.50,
+        "median": 5499.5,
         "min": 4458.21,
         "max": 5742.43,
         "stddev": 549.28,
@@ -837,6 +867,10 @@
       "vcpus": 36,
       "ram_mb": 4096,
       "load_avg": "15.48, 17.53, 17.62"
+    },
+    "timing": {
+      "reported_duration": null,
+      "reported_queued": null
     }
   },
   {
@@ -850,7 +884,7 @@
         "scores": [
           439.42,
           442.78,
-          424.40,
+          424.4,
           441.29,
           413.51
         ],
@@ -882,6 +916,10 @@
       "vcpus": 36,
       "ram_mb": 8192,
       "load_avg": "13.15, 17.47, 19.65"
+    },
+    "timing": {
+      "reported_duration": null,
+      "reported_queued": null
     }
   },
   {
@@ -912,10 +950,10 @@
           3799.66,
           3788.41,
           3796.09,
-          3797.00,
+          3797.0,
           3799.64
         ],
-        "median": 3797.00,
+        "median": 3797.0,
         "min": 3788.41,
         "max": 3799.66,
         "stddev": 4.13,
@@ -927,6 +965,10 @@
       "vcpus": 32,
       "ram_mb": 16384,
       "load_avg": "8.19, 6.03, 5.74"
+    },
+    "timing": {
+      "reported_duration": null,
+      "reported_queued": null
     }
   },
   {
@@ -938,13 +980,13 @@
         "tool": "sysbench",
         "iterations": 5,
         "scores": [
-          1068.00,
+          1068.0,
           1068.58,
           1068.93,
           1067.42,
           1067.25
         ],
-        "median": 1068.00,
+        "median": 1068.0,
         "min": 1067.25,
         "max": 1068.93,
         "stddev": 0.65,
@@ -963,7 +1005,7 @@
         "median": 3784.18,
         "min": 3773.24,
         "max": 3796.31,
-        "stddev": 8.20,
+        "stddev": 8.2,
         "unit": "MiB/sec"
       }
     },
@@ -972,6 +1014,10 @@
       "vcpus": 32,
       "ram_mb": 8192,
       "load_avg": "8.69, 7.77, 7.03"
+    },
+    "timing": {
+      "reported_duration": null,
+      "reported_queued": null
     }
   },
   {
@@ -983,15 +1029,15 @@
         "tool": "sysbench",
         "iterations": 5,
         "scores": [
-          441.20,
-          449.90,
+          441.2,
+          449.9,
           438.88,
           410.38,
           412.82
         ],
         "median": 438.88,
         "min": 410.38,
-        "max": 449.90,
+        "max": 449.9,
         "stddev": 15.99,
         "unit": "events/sec"
       },
@@ -1008,7 +1054,7 @@
         "median": 5724.93,
         "min": 5516.75,
         "max": 5750.76,
-        "stddev": 87.80,
+        "stddev": 87.8,
         "unit": "MiB/sec"
       }
     },
@@ -1017,6 +1063,10 @@
       "vcpus": 36,
       "ram_mb": 16384,
       "load_avg": "19.76, 19.69, 18.37"
+    },
+    "timing": {
+      "reported_duration": null,
+      "reported_queued": null
     }
   }
 ]
