@@ -1,0 +1,56 @@
+{
+  "provider": "circleci",
+  "runner": "arm.large",
+  "timestamp": "2026-03-26T23:57:48Z",
+  "benchmarks": {
+    "cpu": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        1068.93,
+        1070.36,
+        1068.68,
+        1067.28,
+        1069.55
+      ],
+      "median": 1068.93,
+      "min": 1067.28,
+      "max": 1070.36,
+      "stddev": 1.02,
+      "unit": "events/sec"
+    },
+    "memory": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        3803.70,
+        3802.84,
+        3820.54,
+        3795.26,
+        3824.40
+      ],
+      "median": 3803.70,
+      "min": 3795.26,
+      "max": 3824.40,
+      "stddev": 11.18,
+      "unit": "MiB/sec"
+    }
+  },
+  "timing": {
+    "trigger_time": "2026-03-26T23:57:23.111Z",
+    "job_started_at": "2026-03-26T23:57:28Z",
+    "bench_started_at": "2026-03-26T23:57:48Z",
+    "queue_seconds": 5,
+    "setup_seconds": 20,
+    "total_seconds": 25
+  },
+  "system": {
+    "os": "Ubuntu",
+    "os_version": "Ubuntu 24.04.4 LTS",
+    "arch": "aarch64",
+    "processor": "unknown",
+    "vcpus": 32,
+    "ram_mb": 16384,
+    "load_avg": "7.93, 8.15, 6.80"
+  }
+}

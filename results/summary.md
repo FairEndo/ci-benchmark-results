@@ -1,6 +1,6 @@
 # CI Benchmark Results
 
-Last updated: 2026-03-26 23:23:35 UTC
+Last updated: 2026-03-26 23:59:36 UTC
 
 Showing the most recent run per provider/runner combination.
 Full history is available in [`results/raw/`](raw/).
@@ -14,11 +14,11 @@ Full history is available in [`results/raw/`](raw/).
 | github-actions | ubuntu-22.04 | 1443.62 events/sec | ±2 | 6014.07 MiB/sec | ±35.49 | 1981.4 | ±19.96 | AMD EPYC 7763 64-Core Processor | 4 | 15991 MB |
 | github-actions | ubuntu-24.04 | 1443.57 events/sec | ±0.12 | 6074.95 MiB/sec | ±1.07 | 1414.52 | ±41.07 | AMD EPYC 7763 64-Core Processor | 4 | 15994 MB |
 | github-actions | ubuntu-latest | 1442.13 events/sec | ±0.32 | 6029.65 MiB/sec | ±3.44 | 1965.96 | ±11.88 | AMD EPYC 7763 64-Core Processor | 4 | 15989 MB |
-| circleci | arm.medium | 1069.29 events/sec | ±0.68 | 3787.74 MiB/sec | ±7.52 | — | — | unknown | 32 | 8192 MB |
-| circleci | arm.large | 1068.40 events/sec | ±0.93 | 3799.70 MiB/sec | ±119.27 | — | — | unknown | 32 | 16384 MB |
-| circleci | large | 446.99 events/sec | ±1.95 | 5777.50 MiB/sec | ±46.09 | — | — | Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz | 36 | 8192 MB |
-| circleci | medium | 444.56 events/sec | ±6.17 | 5410.25 MiB/sec | ±286.38 | — | — | Intel(R) Xeon(R) Platinum 8223CL CPU @ 3.00GHz | 36 | 4096 MB |
-| circleci | xlarge | 441.61 events/sec | ±6.06 | 5774.44 MiB/sec | ±8.01 | — | — | Intel(R) Xeon(R) Platinum 8223CL CPU @ 3.00GHz | 36 | 16384 MB |
+| circleci | arm.large | 1068.93 events/sec | ±1.02 | 3803.70 MiB/sec | ±11.18 | — | — | unknown | 32 | 16384 MB |
+| circleci | arm.medium | 1068.69 events/sec | ±0.95 | 3795.55 MiB/sec | ±3.90 | — | — | unknown | 32 | 8192 MB |
+| circleci | medium | 449.60 events/sec | ±2.21 | 5767.68 MiB/sec | ±64.42 | — | — | Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz | 36 | 4096 MB |
+| circleci | large | 443.53 events/sec | ±3.62 | 5479.80 MiB/sec | ±799.23 | — | — | Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz | 36 | 8192 MB |
+| circleci | xlarge | 432.34 events/sec | ±10.96 | 5770.05 MiB/sec | ±83.25 | — | — | Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz | 36 | 16384 MB |
 
 ---
-*32 total run(s) recorded.*
+*37 total run(s) recorded.*
