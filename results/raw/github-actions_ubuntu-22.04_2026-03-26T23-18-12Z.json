@@ -1,0 +1,128 @@
+{
+  "provider": "github-actions",
+  "runner": "ubuntu-22.04",
+  "timestamp": "2026-03-26T23:18:12Z",
+  "benchmarks": {
+    "cpu": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        1439.36,
+        1443.62,
+        1443.64,
+        1443.9,
+        1439.96
+      ],
+      "median": 1443.62,
+      "min": 1439.36,
+      "max": 1443.9,
+      "stddev": 2,
+      "unit": "events/sec"
+    },
+    "memory": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        5923.48,
+        6015.4,
+        5999.72,
+        6014.78,
+        6014.07
+      ],
+      "median": 6014.07,
+      "min": 5923.48,
+      "max": 6015.4,
+      "stddev": 35.49,
+      "unit": "MiB/sec"
+    },
+    "disk": {
+      "tool": "fio",
+      "iterations": 5,
+      "runtime_seconds": 5,
+      "composite": {
+        "scores": [
+          1981.4,
+          1972.61,
+          1984.79,
+          1932.65,
+          1985.85
+        ],
+        "median": 1981.4,
+        "min": 1932.65,
+        "max": 1985.85,
+        "stddev": 19.96,
+        "unit": "score"
+      },
+      "seq_read": {
+        "scores": [
+          415.64,
+          415.02,
+          414.69,
+          416.05,
+          416.72
+        ],
+        "median": 415.64,
+        "min": 414.69,
+        "max": 416.72,
+        "stddev": 0.72,
+        "unit": "MB/s"
+      },
+      "seq_write": {
+        "scores": [
+          416.52,
+          417.15,
+          414.57,
+          413.92,
+          415.45
+        ],
+        "median": 415.45,
+        "min": 413.92,
+        "max": 417.15,
+        "stddev": 1.19,
+        "unit": "MB/s"
+      },
+      "rand_read": {
+        "scores": [
+          6851.83,
+          6997.4,
+          7119.38,
+          6533.88,
+          7077.58
+        ],
+        "median": 6997.4,
+        "min": 6533.88,
+        "max": 7119.38,
+        "stddev": 211.77,
+        "unit": "IOPS"
+      },
+      "rand_write": {
+        "scores": [
+          12993.6,
+          12498.7,
+          12679.4,
+          12398.92,
+          12692.26
+        ],
+        "median": 12679.4,
+        "min": 12398.92,
+        "max": 12993.6,
+        "stddev": 203.28,
+        "unit": "IOPS"
+      }
+    }
+  },
+  "timing": {
+    "trigger_time": "2026-03-26T23:17:49Z",
+    "job_started_at": "2026-03-26T23:17:54Z",
+    "bench_started_at": "2026-03-26T23:18:12Z",
+    "queue_seconds": 5,
+    "setup_seconds": 18,
+    "total_seconds": 23
+  },
+  "system": {
+    "processor": "AMD EPYC 7763 64-Core Processor",
+    "vcpus": 4,
+    "ram_mb": 15991,
+    "load_avg": "0.25, 0.13, 0.06"
+  }
+}

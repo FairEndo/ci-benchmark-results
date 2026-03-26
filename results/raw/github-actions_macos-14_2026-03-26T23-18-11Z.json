@@ -1,0 +1,128 @@
+{
+  "provider": "github-actions",
+  "runner": "macos-14",
+  "timestamp": "2026-03-26T23:18:11Z",
+  "benchmarks": {
+    "cpu": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        9150497.12,
+        9339033.50,
+        9246885.58,
+        9139471.04,
+        9207666.73
+      ],
+      "median": 9207666.73,
+      "min": 9139471.04,
+      "max": 9339033.50,
+      "stddev": 72533.29,
+      "unit": "events/sec"
+    },
+    "memory": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        5697.12,
+        5790.79,
+        6083.50,
+        6063.38,
+        6073.09
+      ],
+      "median": 6063.38,
+      "min": 5697.12,
+      "max": 6083.50,
+      "stddev": 164.18,
+      "unit": "MiB/sec"
+    },
+    "disk": {
+      "tool": "fio",
+      "iterations": 5,
+      "runtime_seconds": 5,
+      "composite": {
+        "scores": [
+          80238.98,
+          86434.49,
+          91711.86,
+          87856.19,
+          87238.78
+        ],
+        "median": 87238.78,
+        "min": 80238.98,
+        "max": 91711.86,
+        "stddev": 3703.00,
+        "unit": "score"
+      },
+      "seq_read": {
+        "scores": [
+          11620.88,
+          12949.41,
+          14874.02,
+          13072.79,
+          12663.67
+        ],
+        "median": 12949.41,
+        "min": 11620.88,
+        "max": 14874.02,
+        "stddev": 1051.51,
+        "unit": "MB/s"
+      },
+      "seq_write": {
+        "scores": [
+          11527.69,
+          14476.10,
+          14431.11,
+          13208.56,
+          13840.03
+        ],
+        "median": 13840.03,
+        "min": 11527.69,
+        "max": 14476.10,
+        "stddev": 1087.22,
+        "unit": "MB/s"
+      },
+      "rand_read": {
+        "scores": [
+          787945.01,
+          759417.20,
+          807021.40,
+          873511.60,
+          833276.80
+        ],
+        "median": 807021.40,
+        "min": 759417.20,
+        "max": 873511.60,
+        "stddev": 38998.68,
+        "unit": "IOPS"
+      },
+      "rand_write": {
+        "scores": [
+          392703.06,
+          392072.40,
+          408402.92,
+          395000.00,
+          396599.80
+        ],
+        "median": 395000.00,
+        "min": 392072.40,
+        "max": 408402.92,
+        "stddev": 5948.48,
+        "unit": "IOPS"
+      }
+    }
+  },
+  "timing": {
+    "trigger_time": "2026-03-26T23:17:49Z",
+    "job_started_at": "2026-03-26T23:17:53Z",
+    "bench_started_at": "2026-03-26T23:18:11Z",
+    "queue_seconds": 4,
+    "setup_seconds": 18,
+    "total_seconds": 22
+  },
+  "system": {
+    "processor": "Apple M1 (Virtual)",
+    "vcpus": 3,
+    "ram_mb": 7168,
+    "load_avg": "1.50 6.21 7.05"
+  }
+}

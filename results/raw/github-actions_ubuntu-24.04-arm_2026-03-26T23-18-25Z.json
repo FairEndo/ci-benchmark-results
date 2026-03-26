@@ -1,0 +1,128 @@
+{
+  "provider": "github-actions",
+  "runner": "ubuntu-24.04-arm",
+  "timestamp": "2026-03-26T23:18:25Z",
+  "benchmarks": {
+    "cpu": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        1499.43,
+        1499.43,
+        1499.65,
+        1499.79,
+        1499.36
+      ],
+      "median": 1499.43,
+      "min": 1499.36,
+      "max": 1499.79,
+      "stddev": 0.16,
+      "unit": "events/sec"
+    },
+    "memory": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        5331.85,
+        5333.91,
+        5331.43,
+        5333.33,
+        5331.21
+      ],
+      "median": 5331.85,
+      "min": 5331.21,
+      "max": 5333.91,
+      "stddev": 1.08,
+      "unit": "MiB/sec"
+    },
+    "disk": {
+      "tool": "fio",
+      "iterations": 5,
+      "runtime_seconds": 5,
+      "composite": {
+        "scores": [
+          631.09,
+          632.60,
+          631.55,
+          635.12,
+          598.25
+        ],
+        "median": 631.55,
+        "min": 598.25,
+        "max": 635.12,
+        "stddev": 13.81,
+        "unit": "score"
+      },
+      "seq_read": {
+        "scores": [
+          416.12,
+          414.12,
+          413.82,
+          416.13,
+          414.19
+        ],
+        "median": 414.19,
+        "min": 413.82,
+        "max": 416.13,
+        "stddev": 1.03,
+        "unit": "MB/s"
+      },
+      "seq_write": {
+        "scores": [
+          166.83,
+          166.50,
+          157.78,
+          167.00,
+          144.06
+        ],
+        "median": 166.50,
+        "min": 144.06,
+        "max": 167.00,
+        "stddev": 8.90,
+        "unit": "MB/s"
+      },
+      "rand_read": {
+        "scores": [
+          6161.37,
+          6259.55,
+          6618.48,
+          6290.94,
+          5851.83
+        ],
+        "median": 6259.55,
+        "min": 5851.83,
+        "max": 6618.48,
+        "stddev": 246.18,
+        "unit": "IOPS"
+      },
+      "rand_write": {
+        "scores": [
+          370.85,
+          371.05,
+          368.13,
+          372.18,
+          366.85
+        ],
+        "median": 370.85,
+        "min": 366.85,
+        "max": 372.18,
+        "stddev": 1.99,
+        "unit": "IOPS"
+      }
+    }
+  },
+  "timing": {
+    "trigger_time": "2026-03-26T23:17:49Z",
+    "job_started_at": "2026-03-26T23:17:53Z",
+    "bench_started_at": "2026-03-26T23:18:25Z",
+    "queue_seconds": 4,
+    "setup_seconds": 32,
+    "total_seconds": 36
+  },
+  "system": {
+    "processor": "unknown",
+    "vcpus": 4,
+    "ram_mb": 15950,
+    "load_avg": "0.75, 0.20, 0.06"
+  }
+}
