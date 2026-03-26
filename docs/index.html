@@ -184,6 +184,58 @@
                 font-style: italic;
             }
 
+            .section-desc {
+                font-size: 0.88rem;
+                color: var(--text-secondary);
+                line-height: 1.65;
+                margin: -8px 0 16px;
+                max-width: 80ch;
+            }
+
+            .section-desc code {
+                background: rgba(67, 97, 238, 0.12);
+                padding: 1px 6px;
+                border-radius: 4px;
+                font-size: 0.84rem;
+                color: var(--text-primary);
+            }
+
+            .about-card {
+                margin-bottom: 36px;
+            }
+
+            .about-card .about-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+
+            .about-item {
+                padding: 14px 16px;
+                background: var(--bg-card);
+                border-radius: 8px;
+                border-left: 3px solid var(--accent);
+            }
+
+            .about-item h3 {
+                font-size: 0.92rem;
+                font-weight: 600;
+                color: var(--text-heading);
+                margin-bottom: 6px;
+            }
+
+            .about-item p {
+                font-size: 0.84rem;
+                color: var(--text-secondary);
+                line-height: 1.6;
+            }
+
+            @media (max-width: 900px) {
+                .about-card .about-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+
             .provider-badge {
                 display: inline-block;
                 padding: 2px 10px;
@@ -431,6 +483,60 @@
             </div>
 
             <main id="dashboard" style="display: none">
+                <!-- About the benchmarks -->
+                <section class="card about-card">
+                    <h2>About the Benchmarks</h2>
+                    <p class="section-desc">
+                        This dashboard compares CI runner performance using
+                        standardized benchmarks. Runners are grouped into
+                        <strong>hardware tiers</strong> by OS and vCPU count so
+                        you're always comparing like with like. Each benchmark
+                        run executes the same workload multiple times and
+                        reports the median score for stability.
+                    </p>
+                    <div class="about-grid">
+                        <div class="about-item">
+                            <h3>&#9889; CPU Score</h3>
+                            <p>
+                                Measured with <code>sysbench cpu</code>. Counts
+                                how many prime-number computation events the
+                                runner completes per second. Higher is
+                                better&mdash;it reflects raw single-threaded
+                                compute throughput.
+                            </p>
+                        </div>
+                        <div class="about-item">
+                            <h3>&#128190; Memory Throughput</h3>
+                            <p>
+                                Measured with <code>sysbench memory</code>.
+                                Reads and writes sequential blocks of memory as
+                                fast as possible, reported in MiB/sec. Higher is
+                                better&mdash;it reflects memory bandwidth
+                                available to your CI jobs.
+                            </p>
+                        </div>
+                        <div class="about-item">
+                            <h3>&#9201; Timing &amp; Queue</h3>
+                            <p>
+                                Tracks the full lifecycle of each CI
+                                job&mdash;from trigger to completion. Queue time
+                                is how long the job waited before a runner
+                                picked it up. Run time is actual execution. Both
+                                matter for real-world CI speed.
+                            </p>
+                        </div>
+                        <div class="about-item">
+                            <h3>&#128200; Trend Tracking</h3>
+                            <p>
+                                Every run is recorded over time so you can spot
+                                regressions or improvements. The timeline chart
+                                plots CPU median scores across all runs, grouped
+                                by provider and runner.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Tier sections are rendered dynamically here -->
                 <div id="tier-container"></div>
 
@@ -440,6 +546,14 @@
                 <!-- Global timeline chart -->
                 <section class="card" id="timeline-section">
                     <h2>Performance Over Time</h2>
+                    <p class="section-desc">
+                        CPU median scores (events/sec) plotted over time for
+                        every provider/runner combination. Use this to spot
+                        performance regressions, improvements, or variability
+                        across runs. Each point is one benchmark run; lines
+                        connect consecutive runs for the same runner. Hover for
+                        details.
+                    </p>
                     <div class="chart-container" style="min-height: 380px">
                         <canvas id="timeline-chart"></canvas>
                     </div>
@@ -722,6 +836,20 @@
                         "</span>";
                     leaderCard.appendChild(lh2);
 
+                    var lDesc = document.createElement("p");
+                    lDesc.className = "section-desc";
+                    lDesc.innerHTML =
+                        "Runners ranked by CPU score (highest first) within this hardware tier. " +
+                        "<strong>Stddev</strong> shows how consistent scores are across iterations\u2014lower " +
+                        "means more predictable performance. All scores are medians from " +
+                        (tier.runs[0] &&
+                        tier.runs[0].benchmarks &&
+                        tier.runs[0].benchmarks.cpu
+                            ? tier.runs[0].benchmarks.cpu.iterations
+                            : "multiple") +
+                        " iterations.";
+                    leaderCard.appendChild(lDesc);
+
                     var tableWrap = document.createElement("div");
                     tableWrap.className = "table-wrapper";
 
@@ -830,6 +958,12 @@
                     var cpuH2 = document.createElement("h2");
                     cpuH2.textContent = "CPU Performance";
                     cpuCard.appendChild(cpuH2);
+                    var cpuDesc = document.createElement("p");
+                    cpuDesc.className = "section-desc";
+                    cpuDesc.innerHTML =
+                        "Median <code>sysbench cpu</code> events/sec with min\u2013max error bars. " +
+                        "Tests single-threaded prime computation speed.";
+                    cpuCard.appendChild(cpuDesc);
                     var cpuChartDiv = document.createElement("div");
                     cpuChartDiv.className = "chart-container";
                     var cpuCanvas = document.createElement("canvas");
@@ -844,6 +978,12 @@
                     var memH2 = document.createElement("h2");
                     memH2.textContent = "Memory Performance";
                     memCard.appendChild(memH2);
+                    var memDesc = document.createElement("p");
+                    memDesc.className = "section-desc";
+                    memDesc.innerHTML =
+                        "Median <code>sysbench memory</code> throughput in MiB/sec with min\u2013max error bars. " +
+                        "Tests sequential read/write bandwidth.";
+                    memCard.appendChild(memDesc);
                     var memChartDiv = document.createElement("div");
                     memChartDiv.className = "chart-container";
                     var memCanvas = document.createElement("canvas");
@@ -1284,6 +1424,22 @@
                         (allRuns.length !== 1 ? "s" : "") +
                         "</span>";
                     section.appendChild(h2);
+
+                    var tDesc = document.createElement("p");
+                    tDesc.className = "section-desc";
+                    tDesc.innerHTML =
+                        "Every CI job\u2019s lifecycle timestamps and durations. " +
+                        "<strong>Computed</strong> values are derived from recorded timestamps: " +
+                        "Total Time = Started At \u2013 Created At + Run Time, " +
+                        "Queued Time = Started At \u2013 Created At, " +
+                        "Run Time = Total \u2013 Queued. " +
+                        "<strong>Reported</strong> values come directly from the CI provider\u2019s API. " +
+                        "Queue times are color-coded: " +
+                        '<span style="color:#2a9d8f">green</span> &lt; 60s, ' +
+                        '<span style="color:#f77f00">orange</span> 60\u2013120s, ' +
+                        '<span style="color:#e63946">red</span> &ge; 120s. ' +
+                        "Click any column header to sort.";
+                    section.appendChild(tDesc);
 
                     var tableWrap = document.createElement("div");
                     tableWrap.className = "table-wrapper";
