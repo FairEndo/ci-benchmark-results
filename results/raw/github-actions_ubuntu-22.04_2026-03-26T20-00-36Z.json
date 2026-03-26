@@ -1,0 +1,53 @@
+{
+  "provider": "github-actions",
+  "runner": "ubuntu-22.04",
+  "timestamp": "2026-03-26T20:00:36Z",
+  "benchmarks": {
+    "cpu": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        1146.36,
+        1147.44,
+        1147.99,
+        1142.79,
+        1147.3
+      ],
+      "median": 1147.3,
+      "min": 1142.79,
+      "max": 1147.99,
+      "stddev": 1.87,
+      "unit": "events/sec"
+    },
+    "memory": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        6902.05,
+        6949.1,
+        6942.03,
+        6949.45,
+        6942.52
+      ],
+      "median": 6942.52,
+      "min": 6902.05,
+      "max": 6949.45,
+      "stddev": 17.77,
+      "unit": "MiB/sec"
+    }
+  },
+  "timing": {
+    "trigger_time": "2026-03-26T20:00:13Z",
+    "job_started_at": "2026-03-26T20:00:18Z",
+    "bench_started_at": "2026-03-26T20:00:36Z",
+    "queue_seconds": 5,
+    "setup_seconds": 18,
+    "total_seconds": 23
+  },
+  "system": {
+    "processor": "Intel(R) Xeon(R) Platinum 8370C CPU @ 2.80GHz",
+    "vcpus": 4,
+    "ram_mb": 15994,
+    "load_avg": "0.20, 0.10, 0.06"
+  }
+}
