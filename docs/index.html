@@ -217,6 +217,43 @@
                 width: 100% !important;
             }
 
+            /* Tier sections */
+            .tier-section {
+                margin-bottom: 48px;
+            }
+
+            .tier-heading {
+                font-size: 1.55rem;
+                font-weight: 700;
+                color: var(--text-heading);
+                margin-bottom: 4px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .tier-heading .tier-badge {
+                display: inline-block;
+                font-size: 0.75rem;
+                font-weight: 500;
+                background: var(--accent);
+                color: #fff;
+                padding: 3px 12px;
+                border-radius: 12px;
+            }
+
+            .tier-meta {
+                font-size: 0.88rem;
+                color: var(--text-secondary);
+                margin-bottom: 20px;
+            }
+
+            .tier-divider {
+                border: none;
+                border-top: 1px solid var(--border-color);
+                margin: 8px 0 24px;
+            }
+
             /* Loading & Error */
             .loading-state,
             .error-state {
@@ -281,6 +318,10 @@
                     font-size: 1.5rem;
                 }
 
+                .tier-heading {
+                    font-size: 1.25rem;
+                }
+
                 .card {
                     padding: 16px;
                 }
@@ -317,7 +358,7 @@
                 <h1>CI Benchmark Dashboard</h1>
                 <p class="subtitle">
                     Comparative performance metrics across CI providers and
-                    runners
+                    runners, grouped by hardware tier
                 </p>
                 <div class="last-updated" id="last-updated"></div>
             </header>
@@ -334,51 +375,11 @@
             </div>
 
             <main id="dashboard" style="display: none">
-                <!-- Leaderboard Table -->
-                <section class="card" id="leaderboard-section">
-                    <h2>
-                        Leaderboard
-                        <span class="badge" id="leaderboard-count"></span>
-                    </h2>
-                    <div class="table-wrapper">
-                        <table id="leaderboard-table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Provider</th>
-                                    <th>Runner</th>
-                                    <th>CPU Score</th>
-                                    <th>CPU Stddev</th>
-                                    <th>Memory Throughput</th>
-                                    <th>Mem Stddev</th>
-                                    <th>Processor</th>
-                                    <th>vCPUs</th>
-                                    <th>RAM</th>
-                                </tr>
-                            </thead>
-                            <tbody id="leaderboard-body"></tbody>
-                        </table>
-                    </div>
-                </section>
+                <!-- Tier sections are rendered dynamically here -->
+                <div id="tier-container"></div>
 
-                <!-- Bar Charts -->
-                <div class="charts-grid">
-                    <section class="card">
-                        <h2>CPU Performance</h2>
-                        <div class="chart-container">
-                            <canvas id="cpu-bar-chart"></canvas>
-                        </div>
-                    </section>
-                    <section class="card">
-                        <h2>Memory Performance</h2>
-                        <div class="chart-container">
-                            <canvas id="mem-bar-chart"></canvas>
-                        </div>
-                    </section>
-                </div>
-
-                <!-- Line Chart -->
-                <section class="card">
+                <!-- Global timeline chart -->
+                <section class="card" id="timeline-section">
                     <h2>Performance Over Time</h2>
                     <div class="chart-container" style="min-height: 380px">
                         <canvas id="timeline-chart"></canvas>
@@ -394,7 +395,7 @@
                 "use strict";
 
                 /* Colorblind-friendly palette */
-                const PALETTE = [
+                var PALETTE = [
                     "#4361ee",
                     "#f77f00",
                     "#2a9d8f",
@@ -421,7 +422,7 @@
                 }
 
                 function fmtRAM(mb) {
-                    if (mb == null) return "—";
+                    if (mb == null) return "\u2014";
                     if (mb >= 1024) return (mb / 1024).toFixed(1) + " GiB";
                     return mb + " MiB";
                 }
@@ -442,7 +443,39 @@
                     return run.provider + " / " + run.runner;
                 }
 
-                /* Get most recent run per provider+runner */
+                function tierLabel(run) {
+                    var vcpus =
+                        run.system && run.system.vcpus != null
+                            ? run.system.vcpus
+                            : null;
+                    var suffix =
+                        vcpus != null
+                            ? " (" +
+                              vcpus +
+                              " vCPU" +
+                              (vcpus !== 1 ? "s" : "") +
+                              ")"
+                            : "";
+                    return shortLabel(run) + suffix;
+                }
+
+                function tierKey(run) {
+                    return run.system && run.system.vcpus != null
+                        ? String(run.system.vcpus)
+                        : "__unknown__";
+                }
+
+                function esc(str) {
+                    var el = document.createElement("span");
+                    el.textContent = str;
+                    return el.innerHTML;
+                }
+
+                function chartColors(i) {
+                    return PALETTE[i % PALETTE.length];
+                }
+
+                /* Keep only the latest run per provider+runner combo */
                 function dedup(runs) {
                     var map = {};
                     runs.forEach(function (r) {
@@ -457,6 +490,55 @@
                     return Object.values(map);
                 }
 
+                /* Group an array of runs by vCPU count, return sorted array of tier objects */
+                function groupByTier(latest) {
+                    var tiers = {};
+                    latest.forEach(function (run) {
+                        var k = tierKey(run);
+                        if (!tiers[k]) tiers[k] = [];
+                        tiers[k].push(run);
+                    });
+
+                    var keys = Object.keys(tiers);
+                    keys.sort(function (a, b) {
+                        if (a === "__unknown__") return 1;
+                        if (b === "__unknown__") return -1;
+                        return Number(a) - Number(b);
+                    });
+
+                    return keys.map(function (k) {
+                        var runs = tiers[k];
+                        var vcpus = k !== "__unknown__" ? Number(k) : null;
+
+                        /* compute RAM range */
+                        var ramValues = runs
+                            .map(function (r) {
+                                return r.system && r.system.ram_mb != null
+                                    ? r.system.ram_mb
+                                    : null;
+                            })
+                            .filter(function (v) {
+                                return v != null;
+                            });
+                        var ramMin =
+                            ramValues.length > 0
+                                ? Math.min.apply(null, ramValues)
+                                : null;
+                        var ramMax =
+                            ramValues.length > 0
+                                ? Math.max.apply(null, ramValues)
+                                : null;
+
+                        return {
+                            key: k,
+                            vcpus: vcpus,
+                            runs: runs,
+                            ramMin: ramMin,
+                            ramMax: ramMax,
+                        };
+                    });
+                }
+
                 /* ---- Rendering ---- */
 
                 function renderHeader(runs) {
@@ -469,9 +551,90 @@
                         "Last updated: " + fmtDate(latest.timestamp);
                 }
 
-                function renderLeaderboard(latest) {
-                    /* Sort by CPU median descending */
-                    var sorted = latest.slice().sort(function (a, b) {
+                /* Build the DOM for a single tier section */
+                function renderTierSection(tier, tierIndex) {
+                    var container = document.getElementById("tier-container");
+
+                    var section = document.createElement("div");
+                    section.className = "tier-section";
+
+                    /* Tier heading */
+                    var heading = document.createElement("div");
+                    heading.className = "tier-heading";
+                    var title =
+                        tier.vcpus != null
+                            ? tier.vcpus +
+                              " vCPU" +
+                              (tier.vcpus !== 1 ? "s" : "")
+                            : "Unknown Hardware Tier";
+                    heading.innerHTML =
+                        esc(title) +
+                        '<span class="tier-badge">' +
+                        tier.runs.length +
+                        " runner" +
+                        (tier.runs.length !== 1 ? "s" : "") +
+                        "</span>";
+                    section.appendChild(heading);
+
+                    /* Tier meta */
+                    var meta = document.createElement("div");
+                    meta.className = "tier-meta";
+                    var metaParts = [];
+                    if (tier.ramMin != null && tier.ramMax != null) {
+                        if (tier.ramMin === tier.ramMax) {
+                            metaParts.push(fmtRAM(tier.ramMin) + " RAM");
+                        } else {
+                            metaParts.push(
+                                fmtRAM(tier.ramMin) +
+                                    " \u2013 " +
+                                    fmtRAM(tier.ramMax) +
+                                    " RAM",
+                            );
+                        }
+                    }
+                    meta.textContent = metaParts.join(" \u00b7 ");
+                    section.appendChild(meta);
+
+                    var hr = document.createElement("hr");
+                    hr.className = "tier-divider";
+                    section.appendChild(hr);
+
+                    /* Leaderboard */
+                    var leaderCard = document.createElement("section");
+                    leaderCard.className = "card";
+
+                    var lh2 = document.createElement("h2");
+                    lh2.innerHTML =
+                        "Leaderboard" +
+                        '<span class="badge">' +
+                        tier.runs.length +
+                        " runner" +
+                        (tier.runs.length !== 1 ? "s" : "") +
+                        "</span>";
+                    leaderCard.appendChild(lh2);
+
+                    var tableWrap = document.createElement("div");
+                    tableWrap.className = "table-wrapper";
+
+                    var table = document.createElement("table");
+                    var thead = document.createElement("thead");
+                    thead.innerHTML =
+                        "<tr>" +
+                        "<th>#</th>" +
+                        "<th>Provider</th>" +
+                        "<th>Runner</th>" +
+                        "<th>CPU Score</th>" +
+                        "<th>CPU Stddev</th>" +
+                        "<th>Memory Throughput</th>" +
+                        "<th>Mem Stddev</th>" +
+                        "<th>Processor</th>" +
+                        "<th>vCPUs</th>" +
+                        "<th>RAM</th>" +
+                        "</tr>";
+                    table.appendChild(thead);
+
+                    var tbody = document.createElement("tbody");
+                    var sorted = tier.runs.slice().sort(function (a, b) {
                         var aScore =
                             a.benchmarks && a.benchmarks.cpu
                                 ? a.benchmarks.cpu.median
@@ -482,14 +645,6 @@
                                 : 0;
                         return bScore - aScore;
                     });
-
-                    document.getElementById("leaderboard-count").textContent =
-                        sorted.length +
-                        " runner" +
-                        (sorted.length !== 1 ? "s" : "");
-
-                    var tbody = document.getElementById("leaderboard-body");
-                    tbody.innerHTML = "";
 
                     sorted.forEach(function (run, i) {
                         var cpu =
@@ -540,32 +695,104 @@
                                 : '<span class="na">&mdash;</span>') +
                             "</td>" +
                             "<td>" +
-                            esc(sys.processor || "—") +
+                            esc(sys.processor || "\u2014") +
                             "</td>" +
                             "<td>" +
-                            (sys.vcpus != null ? sys.vcpus : "—") +
+                            (sys.vcpus != null ? sys.vcpus : "\u2014") +
                             "</td>" +
                             "<td>" +
                             fmtRAM(sys.ram_mb) +
                             "</td>";
                         tbody.appendChild(tr);
                     });
+
+                    table.appendChild(tbody);
+                    tableWrap.appendChild(table);
+                    leaderCard.appendChild(tableWrap);
+                    section.appendChild(leaderCard);
+
+                    /* Charts grid */
+                    var chartsGrid = document.createElement("div");
+                    chartsGrid.className = "charts-grid";
+
+                    /* CPU bar chart */
+                    var cpuCard = document.createElement("section");
+                    cpuCard.className = "card";
+                    var cpuH2 = document.createElement("h2");
+                    cpuH2.textContent = "CPU Performance";
+                    cpuCard.appendChild(cpuH2);
+                    var cpuChartDiv = document.createElement("div");
+                    cpuChartDiv.className = "chart-container";
+                    var cpuCanvas = document.createElement("canvas");
+                    cpuCanvas.id = "cpu-bar-tier-" + tierIndex;
+                    cpuChartDiv.appendChild(cpuCanvas);
+                    cpuCard.appendChild(cpuChartDiv);
+                    chartsGrid.appendChild(cpuCard);
+
+                    /* Memory bar chart */
+                    var memCard = document.createElement("section");
+                    memCard.className = "card";
+                    var memH2 = document.createElement("h2");
+                    memH2.textContent = "Memory Performance";
+                    memCard.appendChild(memH2);
+                    var memChartDiv = document.createElement("div");
+                    memChartDiv.className = "chart-container";
+                    var memCanvas = document.createElement("canvas");
+                    memCanvas.id = "mem-bar-tier-" + tierIndex;
+                    memChartDiv.appendChild(memCanvas);
+                    memCard.appendChild(memChartDiv);
+                    chartsGrid.appendChild(memCard);
+
+                    section.appendChild(chartsGrid);
+                    container.appendChild(section);
+
+                    /* Render the charts */
+                    renderCPUBar(sorted, "cpu-bar-tier-" + tierIndex);
+                    renderMemBar(sorted, "mem-bar-tier-" + tierIndex);
                 }
 
-                function esc(str) {
-                    var el = document.createElement("span");
-                    el.textContent = str;
-                    return el.innerHTML;
-                }
+                /* ---- Bar Charts ---- */
 
-                /* ---- Charts ---- */
+                var errorBarsPlugin = {
+                    id: "errorBars",
+                    afterDraw: function (chart) {
+                        var meta = chart.getDatasetMeta(0);
+                        var ds = chart.data.datasets[0];
+                        if (!ds.errorBars) return;
+                        var ctx2 = chart.ctx;
+                        ctx2.save();
+                        ctx2.strokeStyle = "#e0e0e0";
+                        ctx2.lineWidth = 1.5;
+                        meta.data.forEach(function (bar, i) {
+                            var xScale = chart.scales.x;
+                            var median = ds.data[i];
+                            var lo = xScale.getPixelForValue(
+                                median - ds.errorBars.mins[i],
+                            );
+                            var hi = xScale.getPixelForValue(
+                                median + ds.errorBars.maxs[i],
+                            );
+                            var y = bar.y;
+                            var capH = 6;
+                            ctx2.beginPath();
+                            ctx2.moveTo(lo, y);
+                            ctx2.lineTo(hi, y);
+                            ctx2.stroke();
+                            ctx2.beginPath();
+                            ctx2.moveTo(lo, y - capH);
+                            ctx2.lineTo(lo, y + capH);
+                            ctx2.stroke();
+                            ctx2.beginPath();
+                            ctx2.moveTo(hi, y - capH);
+                            ctx2.lineTo(hi, y + capH);
+                            ctx2.stroke();
+                        });
+                        ctx2.restore();
+                    },
+                };
 
-                function chartColors(index) {
-                    return PALETTE[index % PALETTE.length];
-                }
-
-                function renderCPUBar(latest) {
-                    var sorted = latest.slice().sort(function (a, b) {
+                function renderCPUBar(tierRuns, canvasId) {
+                    var sorted = tierRuns.slice().sort(function (a, b) {
                         var aS =
                             a.benchmarks && a.benchmarks.cpu
                                 ? a.benchmarks.cpu.median
@@ -595,9 +822,10 @@
                         colors.push(chartColors(i));
                     });
 
-                    var ctx = document
-                        .getElementById("cpu-bar-chart")
-                        .getContext("2d");
+                    var canvas = document.getElementById(canvasId);
+                    if (!canvas) return;
+
+                    var ctx = canvas.getContext("2d");
                     new Chart(ctx, {
                         type: "bar",
                         data: {
@@ -671,56 +899,19 @@
                                 },
                             },
                         },
-                        plugins: [
-                            {
-                                id: "errorBars",
-                                afterDraw: function (chart) {
-                                    var meta = chart.getDatasetMeta(0);
-                                    var ds = chart.data.datasets[0];
-                                    if (!ds.errorBars) return;
-                                    var ctx2 = chart.ctx;
-                                    ctx2.save();
-                                    ctx2.strokeStyle = "#e0e0e0";
-                                    ctx2.lineWidth = 1.5;
-                                    meta.data.forEach(function (bar, i) {
-                                        var xScale = chart.scales.x;
-                                        var median = ds.data[i];
-                                        var lo = xScale.getPixelForValue(
-                                            median - ds.errorBars.mins[i],
-                                        );
-                                        var hi = xScale.getPixelForValue(
-                                            median + ds.errorBars.maxs[i],
-                                        );
-                                        var y = bar.y;
-                                        var capH = 6;
-                                        ctx2.beginPath();
-                                        ctx2.moveTo(lo, y);
-                                        ctx2.lineTo(hi, y);
-                                        ctx2.stroke();
-                                        ctx2.beginPath();
-                                        ctx2.moveTo(lo, y - capH);
-                                        ctx2.lineTo(lo, y + capH);
-                                        ctx2.stroke();
-                                        ctx2.beginPath();
-                                        ctx2.moveTo(hi, y - capH);
-                                        ctx2.lineTo(hi, y + capH);
-                                        ctx2.stroke();
-                                    });
-                                    ctx2.restore();
-                                },
-                            },
-                        ],
+                        plugins: [errorBarsPlugin],
                     });
                 }
 
-                function renderMemBar(latest) {
-                    /* Filter to those with memory data */
-                    var withMem = latest.filter(function (r) {
+                function renderMemBar(tierRuns, canvasId) {
+                    var withMem = tierRuns.filter(function (r) {
                         return r.benchmarks && r.benchmarks.memory;
                     });
 
+                    var canvas = document.getElementById(canvasId);
+                    if (!canvas) return;
+
                     if (withMem.length === 0) {
-                        var canvas = document.getElementById("mem-bar-chart");
                         var parent = canvas.parentElement;
                         parent.innerHTML =
                             '<p style="text-align:center;color:var(--text-secondary);padding:60px 0;">No memory benchmark data available.</p>';
@@ -749,9 +940,7 @@
                         colors.push(chartColors(i));
                     });
 
-                    var ctx = document
-                        .getElementById("mem-bar-chart")
-                        .getContext("2d");
+                    var ctx = canvas.getContext("2d");
                     new Chart(ctx, {
                         type: "bar",
                         data: {
@@ -825,59 +1014,24 @@
                                 },
                             },
                         },
-                        plugins: [
-                            {
-                                id: "errorBarsMem",
-                                afterDraw: function (chart) {
-                                    var meta = chart.getDatasetMeta(0);
-                                    var ds = chart.data.datasets[0];
-                                    if (!ds.errorBars) return;
-                                    var ctx2 = chart.ctx;
-                                    ctx2.save();
-                                    ctx2.strokeStyle = "#e0e0e0";
-                                    ctx2.lineWidth = 1.5;
-                                    meta.data.forEach(function (bar, i) {
-                                        var xScale = chart.scales.x;
-                                        var median = ds.data[i];
-                                        var lo = xScale.getPixelForValue(
-                                            median - ds.errorBars.mins[i],
-                                        );
-                                        var hi = xScale.getPixelForValue(
-                                            median + ds.errorBars.maxs[i],
-                                        );
-                                        var y = bar.y;
-                                        var capH = 6;
-                                        ctx2.beginPath();
-                                        ctx2.moveTo(lo, y);
-                                        ctx2.lineTo(hi, y);
-                                        ctx2.stroke();
-                                        ctx2.beginPath();
-                                        ctx2.moveTo(lo, y - capH);
-                                        ctx2.lineTo(lo, y + capH);
-                                        ctx2.stroke();
-                                        ctx2.beginPath();
-                                        ctx2.moveTo(hi, y - capH);
-                                        ctx2.lineTo(hi, y + capH);
-                                        ctx2.stroke();
-                                    });
-                                    ctx2.restore();
-                                },
-                            },
-                        ],
+                        plugins: [errorBarsPlugin],
                     });
                 }
 
+                /* ---- Timeline (global, all tiers) ---- */
+
                 function renderTimeline(allRuns) {
-                    /* Group runs by provider+runner combo */
                     var groups = {};
                     allRuns.forEach(function (run) {
                         var k = comboKey(run);
                         if (!groups[k])
-                            groups[k] = { label: shortLabel(run), runs: [] };
+                            groups[k] = {
+                                label: tierLabel(run),
+                                runs: [],
+                            };
                         groups[k].runs.push(run);
                     });
 
-                    /* Sort each group by timestamp */
                     Object.keys(groups).forEach(function (k) {
                         groups[k].runs.sort(function (a, b) {
                             return (
@@ -1002,7 +1156,9 @@
                     });
                 }
 
-                function renderFooter(allRuns) {
+                /* ---- Footer ---- */
+
+                function renderFooter(allRuns, tierCount) {
                     var combos = {};
                     allRuns.forEach(function (r) {
                         combos[comboKey(r)] = true;
@@ -1018,7 +1174,11 @@
                         " across " +
                         m +
                         " provider/runner combination" +
-                        (m !== 1 ? "s" : "");
+                        (m !== 1 ? "s" : "") +
+                        " in " +
+                        tierCount +
+                        " hardware tier" +
+                        (tierCount !== 1 ? "s" : "");
                     footer.style.display = "";
                 }
 
@@ -1039,26 +1199,29 @@
                     }
 
                     var latest = dedup(allRuns);
+                    var tiers = groupByTier(latest);
 
                     document.getElementById("loading").style.display = "none";
                     document.getElementById("dashboard").style.display = "";
 
                     renderHeader(allRuns);
-                    renderLeaderboard(latest);
-                    renderCPUBar(latest);
-                    renderMemBar(latest);
+
+                    tiers.forEach(function (tier, i) {
+                        renderTierSection(tier, i);
+                    });
+
                     renderTimeline(allRuns);
-                    renderFooter(allRuns);
+                    renderFooter(allRuns, tiers.length);
                 }
 
-                /* Boot — fetch data.json from the same directory (works on GitHub Pages / any HTTP server) */
+                /* Boot */
                 fetch("data.json")
                     .then(function (res) {
                         if (!res.ok)
                             throw new Error(
                                 "HTTP " +
                                     res.status +
-                                    " — could not fetch data.json",
+                                    " \u2014 could not fetch data.json",
                             );
                         return res.json();
                     })
