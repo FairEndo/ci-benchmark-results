@@ -298,6 +298,62 @@
                 margin: 8px auto 0;
             }
 
+            /* Timing Stats */
+            .timing-stats-card {
+                margin-top: 48px;
+            }
+
+            .timing-stats-card .table-wrapper {
+                max-height: 600px;
+                overflow-y: auto;
+            }
+
+            .timing-cell {
+                font-variant-numeric: tabular-nums;
+                text-align: right;
+            }
+
+            .timing-warn {
+                color: #f77f00;
+                font-weight: 600;
+            }
+
+            .timing-critical {
+                color: #e63946;
+                font-weight: 600;
+            }
+
+            .timing-good {
+                color: #2a9d8f;
+            }
+
+            .sort-btn {
+                background: none;
+                border: none;
+                color: inherit;
+                font: inherit;
+                font-weight: 600;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
+                padding: 0;
+            }
+
+            .sort-btn:hover {
+                color: #5a7bff;
+            }
+
+            .sort-arrow {
+                font-size: 0.7rem;
+                opacity: 0.4;
+            }
+
+            .sort-arrow.active {
+                opacity: 1;
+                color: #4361ee;
+            }
+
             /* Footer */
             .footer {
                 text-align: center;
@@ -377,6 +433,9 @@
             <main id="dashboard" style="display: none">
                 <!-- Tier sections are rendered dynamically here -->
                 <div id="tier-container"></div>
+
+                <!-- Run Timing Stats table -->
+                <div id="timing-stats-container"></div>
 
                 <!-- Global timeline chart -->
                 <section class="card" id="timeline-section">
@@ -1206,6 +1265,284 @@
                     });
                 }
 
+                /* ---- Timing Stats Table ---- */
+
+                function renderTimingStats(allRuns) {
+                    var container = document.getElementById(
+                        "timing-stats-container",
+                    );
+
+                    var section = document.createElement("section");
+                    section.className = "card timing-stats-card";
+
+                    var h2 = document.createElement("h2");
+                    h2.innerHTML =
+                        "Run Timing Details" +
+                        '<span class="badge">' +
+                        allRuns.length +
+                        " run" +
+                        (allRuns.length !== 1 ? "s" : "") +
+                        "</span>";
+                    section.appendChild(h2);
+
+                    var tableWrap = document.createElement("div");
+                    tableWrap.className = "table-wrapper";
+
+                    var table = document.createElement("table");
+                    table.id = "timing-stats-table";
+
+                    /* Column definitions */
+                    var cols = [
+                        { key: "provider", label: "Provider", type: "text" },
+                        { key: "runner", label: "Runner", type: "text" },
+                        { key: "createdAt", label: "Created At", type: "date" },
+                        { key: "startedAt", label: "Started At", type: "date" },
+                        { key: "stoppedAt", label: "Stopped At", type: "date" },
+                        {
+                            key: "totalTime",
+                            label: "Computed Total Time (s)",
+                            type: "num",
+                        },
+                        {
+                            key: "queuedTime",
+                            label: "Computed Queued Time (s)",
+                            type: "num",
+                        },
+                        {
+                            key: "runTime",
+                            label: "Computed Run Time (s)",
+                            type: "num",
+                        },
+                        {
+                            key: "reportedDur",
+                            label: "Reported Duration (s)",
+                            type: "num",
+                        },
+                        {
+                            key: "reportedQueued",
+                            label: "Reported Queued Time (s)",
+                            type: "num",
+                        },
+                    ];
+
+                    /* Build row data */
+                    var rows = allRuns.map(function (run) {
+                        var t = run.timing || {};
+                        var createdAt = t.trigger_time || null;
+                        var startedAt = t.job_started_at || null;
+
+                        var totalTime =
+                            t.total_seconds != null ? t.total_seconds : null;
+                        var queuedTime =
+                            t.queue_seconds != null ? t.queue_seconds : null;
+                        var runTime =
+                            totalTime != null && queuedTime != null
+                                ? totalTime - queuedTime
+                                : null;
+
+                        /* Compute stoppedAt from startedAt + runTime (or totalTime - queuedTime) */
+                        var stoppedAt = null;
+                        if (
+                            startedAt &&
+                            totalTime != null &&
+                            queuedTime != null
+                        ) {
+                            var started = new Date(startedAt);
+                            stoppedAt = new Date(
+                                started.getTime() + runTime * 1000,
+                            ).toISOString();
+                        }
+
+                        /* Reported fields — check if they exist in the data */
+                        var reportedDur =
+                            t.reported_duration != null
+                                ? t.reported_duration
+                                : null;
+                        var reportedQueued =
+                            t.reported_queued != null
+                                ? t.reported_queued
+                                : null;
+
+                        return {
+                            provider: run.provider || "\u2014",
+                            runner: run.runner || "\u2014",
+                            createdAt: createdAt,
+                            startedAt: startedAt,
+                            stoppedAt: stoppedAt,
+                            totalTime: totalTime,
+                            queuedTime: queuedTime,
+                            runTime: runTime,
+                            reportedDur: reportedDur,
+                            reportedQueued: reportedQueued,
+                        };
+                    });
+
+                    /* Sort state */
+                    var currentSort = { key: "createdAt", asc: false };
+
+                    function sortRows(key, type) {
+                        if (currentSort.key === key) {
+                            currentSort.asc = !currentSort.asc;
+                        } else {
+                            currentSort.key = key;
+                            currentSort.asc = true;
+                        }
+                        rows.sort(function (a, b) {
+                            var va = a[key],
+                                vb = b[key];
+                            if (va == null && vb == null) return 0;
+                            if (va == null) return 1;
+                            if (vb == null) return -1;
+                            if (type === "date") {
+                                va = new Date(va).getTime();
+                                vb = new Date(vb).getTime();
+                            } else if (type === "num") {
+                                va = Number(va);
+                                vb = Number(vb);
+                            } else {
+                                va = String(va).toLowerCase();
+                                vb = String(vb).toLowerCase();
+                            }
+                            if (va < vb) return currentSort.asc ? -1 : 1;
+                            if (va > vb) return currentSort.asc ? 1 : -1;
+                            return 0;
+                        });
+                        renderBody();
+                        updateSortArrows();
+                    }
+
+                    /* Thead */
+                    var thead = document.createElement("thead");
+                    var headRow = document.createElement("tr");
+                    cols.forEach(function (col) {
+                        var th = document.createElement("th");
+                        if (col.type === "num") th.style.textAlign = "right";
+                        var btn = document.createElement("button");
+                        btn.className = "sort-btn";
+                        btn.setAttribute("data-col", col.key);
+                        btn.innerHTML =
+                            esc(col.label) +
+                            ' <span class="sort-arrow" data-arrow="' +
+                            col.key +
+                            '">\u25B2</span>';
+                        btn.addEventListener("click", function () {
+                            sortRows(col.key, col.type);
+                        });
+                        th.appendChild(btn);
+                        headRow.appendChild(th);
+                    });
+                    thead.appendChild(headRow);
+                    table.appendChild(thead);
+
+                    /* Tbody */
+                    var tbody = document.createElement("tbody");
+                    table.appendChild(tbody);
+
+                    function queueClass(val) {
+                        if (val == null) return "";
+                        if (val >= 120) return "timing-critical";
+                        if (val >= 60) return "timing-warn";
+                        return "timing-good";
+                    }
+
+                    function fmtDateShort(iso) {
+                        if (!iso) return '<span class="na">\u2014</span>';
+                        var d = new Date(iso);
+                        var mon = d.toLocaleString(undefined, {
+                            month: "short",
+                        });
+                        var day = d.getDate();
+                        var year = d.getFullYear();
+                        var hh = String(d.getHours()).padStart(2, "0");
+                        var mm = String(d.getMinutes()).padStart(2, "0");
+                        var ss = String(d.getSeconds()).padStart(2, "0");
+                        return esc(
+                            mon +
+                                " " +
+                                day +
+                                ", " +
+                                year +
+                                " " +
+                                hh +
+                                ":" +
+                                mm +
+                                ":" +
+                                ss,
+                        );
+                    }
+
+                    function fmtSec(val) {
+                        if (val == null)
+                            return '<span class="na">\u2014</span>';
+                        return fmtNum(val, 1);
+                    }
+
+                    function renderBody() {
+                        tbody.innerHTML = "";
+                        rows.forEach(function (row) {
+                            var tr = document.createElement("tr");
+                            tr.innerHTML =
+                                '<td><span class="provider-badge">' +
+                                esc(row.provider) +
+                                "</span></td>" +
+                                "<td>" +
+                                esc(row.runner) +
+                                "</td>" +
+                                "<td>" +
+                                fmtDateShort(row.createdAt) +
+                                "</td>" +
+                                "<td>" +
+                                fmtDateShort(row.startedAt) +
+                                "</td>" +
+                                "<td>" +
+                                fmtDateShort(row.stoppedAt) +
+                                "</td>" +
+                                '<td class="timing-cell">' +
+                                fmtSec(row.totalTime) +
+                                "</td>" +
+                                '<td class="timing-cell ' +
+                                queueClass(row.queuedTime) +
+                                '">' +
+                                fmtSec(row.queuedTime) +
+                                "</td>" +
+                                '<td class="timing-cell">' +
+                                fmtSec(row.runTime) +
+                                "</td>" +
+                                '<td class="timing-cell">' +
+                                fmtSec(row.reportedDur) +
+                                "</td>" +
+                                '<td class="timing-cell">' +
+                                fmtSec(row.reportedQueued) +
+                                "</td>";
+                            tbody.appendChild(tr);
+                        });
+                    }
+
+                    function updateSortArrows() {
+                        var arrows = table.querySelectorAll(".sort-arrow");
+                        for (var i = 0; i < arrows.length; i++) {
+                            var arrowEl = arrows[i];
+                            var colKey = arrowEl.getAttribute("data-arrow");
+                            if (colKey === currentSort.key) {
+                                arrowEl.classList.add("active");
+                                arrowEl.textContent = currentSort.asc
+                                    ? "\u25B2"
+                                    : "\u25BC";
+                            } else {
+                                arrowEl.classList.remove("active");
+                                arrowEl.textContent = "\u25B2";
+                            }
+                        }
+                    }
+
+                    /* Initial sort & render */
+                    sortRows("createdAt", "date");
+
+                    tableWrap.appendChild(table);
+                    section.appendChild(tableWrap);
+                    container.appendChild(section);
+                }
+
                 /* ---- Footer ---- */
 
                 function renderFooter(allRuns, tierCount) {
@@ -1260,6 +1597,7 @@
                         renderTierSection(tier, i);
                     });
 
+                    renderTimingStats(allRuns);
                     renderTimeline(allRuns);
                     renderFooter(allRuns, tiers.length);
                 }
