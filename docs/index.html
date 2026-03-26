@@ -443,26 +443,47 @@
                     return run.provider + " / " + run.runner;
                 }
 
+                /* Infer OS from runner name */
+                function inferOS(runner) {
+                    var r = runner.toLowerCase();
+                    if (r.indexOf("ubuntu") !== -1 || r.indexOf("linux") !== -1)
+                        return "Linux";
+                    if (r.indexOf("windows") !== -1 || r.indexOf("win") === 0)
+                        return "Windows";
+                    if (
+                        r.indexOf("macos") !== -1 ||
+                        r.indexOf("mac-os") !== -1 ||
+                        r.indexOf("osx") !== -1
+                    )
+                        return "macOS";
+                    return "Unknown";
+                }
+
+                function tierKey(run) {
+                    var os = inferOS(run.runner);
+                    var vcpus =
+                        run.system && run.system.vcpus != null
+                            ? String(run.system.vcpus)
+                            : "unknown";
+                    return os + "|" + vcpus;
+                }
+
                 function tierLabel(run) {
+                    var os = inferOS(run.runner);
                     var vcpus =
                         run.system && run.system.vcpus != null
                             ? run.system.vcpus
                             : null;
-                    var suffix =
-                        vcpus != null
-                            ? " (" +
-                              vcpus +
-                              " vCPU" +
-                              (vcpus !== 1 ? "s" : "") +
-                              ")"
-                            : "";
-                    return shortLabel(run) + suffix;
-                }
-
-                function tierKey(run) {
-                    return run.system && run.system.vcpus != null
-                        ? String(run.system.vcpus)
-                        : "__unknown__";
+                    var parts = [shortLabel(run)];
+                    var tierParts = [];
+                    if (os !== "Unknown") tierParts.push(os);
+                    if (vcpus != null)
+                        tierParts.push(
+                            vcpus + " vCPU" + (vcpus !== 1 ? "s" : ""),
+                        );
+                    if (tierParts.length > 0)
+                        parts.push("(" + tierParts.join(", ") + ")");
+                    return parts.join(" ");
                 }
 
                 function esc(str) {
@@ -490,7 +511,7 @@
                     return Object.values(map);
                 }
 
-                /* Group an array of runs by vCPU count, return sorted array of tier objects */
+                /* Group runs by OS + vCPU count, return sorted array of tier objects */
                 function groupByTier(latest) {
                     var tiers = {};
                     latest.forEach(function (run) {
@@ -499,16 +520,37 @@
                         tiers[k].push(run);
                     });
 
+                    /* Sort: known OS tiers first (by OS name then vCPUs), unknown last */
                     var keys = Object.keys(tiers);
                     keys.sort(function (a, b) {
-                        if (a === "__unknown__") return 1;
-                        if (b === "__unknown__") return -1;
-                        return Number(a) - Number(b);
+                        var pa = a.split("|");
+                        var pb = b.split("|");
+                        var osA = pa[0],
+                            vcpuA = pa[1];
+                        var osB = pb[0],
+                            vcpuB = pb[1];
+
+                        /* Push fully unknown tiers to the end */
+                        var unknownA =
+                            osA === "Unknown" && vcpuA === "unknown" ? 1 : 0;
+                        var unknownB =
+                            osB === "Unknown" && vcpuB === "unknown" ? 1 : 0;
+                        if (unknownA !== unknownB) return unknownA - unknownB;
+
+                        /* Sort by OS name, then by vCPU count */
+                        if (osA !== osB) return osA < osB ? -1 : 1;
+                        var nA = vcpuA !== "unknown" ? Number(vcpuA) : Infinity;
+                        var nB = vcpuB !== "unknown" ? Number(vcpuB) : Infinity;
+                        return nA - nB;
                     });
 
                     return keys.map(function (k) {
                         var runs = tiers[k];
-                        var vcpus = k !== "__unknown__" ? Number(k) : null;
+                        var parts = k.split("|");
+                        var os = parts[0];
+                        var vcpuStr = parts[1];
+                        var vcpus =
+                            vcpuStr !== "unknown" ? Number(vcpuStr) : null;
 
                         /* compute RAM range */
                         var ramValues = runs
@@ -531,6 +573,7 @@
 
                         return {
                             key: k,
+                            os: os,
                             vcpus: vcpus,
                             runs: runs,
                             ramMin: ramMin,
@@ -561,11 +604,18 @@
                     /* Tier heading */
                     var heading = document.createElement("div");
                     heading.className = "tier-heading";
+
+                    var titleParts = [];
+                    if (tier.os !== "Unknown") titleParts.push(tier.os);
+                    if (tier.vcpus != null)
+                        titleParts.push(
+                            tier.vcpus +
+                                " vCPU" +
+                                (tier.vcpus !== 1 ? "s" : ""),
+                        );
                     var title =
-                        tier.vcpus != null
-                            ? tier.vcpus +
-                              " vCPU" +
-                              (tier.vcpus !== 1 ? "s" : "")
+                        titleParts.length > 0
+                            ? titleParts.join(" \u00b7 ")
                             : "Unknown Hardware Tier";
                     heading.innerHTML =
                         esc(title) +
