@@ -466,10 +466,10 @@
                     <p class="section-desc">
                         This dashboard compares CI runner performance using
                         standardized benchmarks. Runners are grouped into
-                        <strong>hardware tiers</strong> by OS and vCPU count so
-                        you're always comparing like with like. Each benchmark
-                        run executes the same workload multiple times and
-                        reports the median score for stability.
+                        <strong>hardware tiers</strong> by OS so you're always
+                        comparing like with like. Each benchmark run executes
+                        the same workload multiple times and reports the median
+                        score for stability.
                     </p>
                     <div class="about-grid">
                         <div class="about-item">
@@ -610,12 +610,7 @@
                 }
 
                 function tierKey(run) {
-                    var os = inferOS(run.runner);
-                    var vcpus =
-                        run.system && run.system.vcpus != null
-                            ? String(run.system.vcpus)
-                            : "unknown";
-                    return os + "|" + vcpus;
+                    return inferOS(run.runner);
                 }
 
                 function tierLabel(run) {
@@ -661,7 +656,7 @@
                     return Object.values(map);
                 }
 
-                /* Group runs by OS + vCPU count, return sorted array of tier objects */
+                /* Group runs by OS, return sorted array of tier objects */
                 function groupByTier(latest) {
                     var tiers = {};
                     latest.forEach(function (run) {
@@ -670,37 +665,36 @@
                         tiers[k].push(run);
                     });
 
-                    /* Sort: known OS tiers first (by OS name then vCPUs), unknown last */
+                    /* Sort: known OS tiers first (by OS name), unknown last */
                     var keys = Object.keys(tiers);
                     keys.sort(function (a, b) {
-                        var pa = a.split("|");
-                        var pb = b.split("|");
-                        var osA = pa[0],
-                            vcpuA = pa[1];
-                        var osB = pb[0],
-                            vcpuB = pb[1];
-
-                        /* Push fully unknown tiers to the end */
-                        var unknownA =
-                            osA === "Unknown" && vcpuA === "unknown" ? 1 : 0;
-                        var unknownB =
-                            osB === "Unknown" && vcpuB === "unknown" ? 1 : 0;
+                        var unknownA = a === "Unknown" ? 1 : 0;
+                        var unknownB = b === "Unknown" ? 1 : 0;
                         if (unknownA !== unknownB) return unknownA - unknownB;
-
-                        /* Sort by OS name, then by vCPU count */
-                        if (osA !== osB) return osA < osB ? -1 : 1;
-                        var nA = vcpuA !== "unknown" ? Number(vcpuA) : Infinity;
-                        var nB = vcpuB !== "unknown" ? Number(vcpuB) : Infinity;
-                        return nA - nB;
+                        return a < b ? -1 : a > b ? 1 : 0;
                     });
 
                     return keys.map(function (k) {
                         var runs = tiers[k];
-                        var parts = k.split("|");
-                        var os = parts[0];
-                        var vcpuStr = parts[1];
-                        var vcpus =
-                            vcpuStr !== "unknown" ? Number(vcpuStr) : null;
+
+                        /* compute vCPU range */
+                        var vcpuValues = runs
+                            .map(function (r) {
+                                return r.system && r.system.vcpus != null
+                                    ? r.system.vcpus
+                                    : null;
+                            })
+                            .filter(function (v) {
+                                return v != null;
+                            });
+                        var vcpuMin =
+                            vcpuValues.length > 0
+                                ? Math.min.apply(null, vcpuValues)
+                                : null;
+                        var vcpuMax =
+                            vcpuValues.length > 0
+                                ? Math.max.apply(null, vcpuValues)
+                                : null;
 
                         /* compute RAM range */
                         var ramValues = runs
@@ -723,8 +717,9 @@
 
                         return {
                             key: k,
-                            os: os,
-                            vcpus: vcpus,
+                            os: k,
+                            vcpuMin: vcpuMin,
+                            vcpuMax: vcpuMax,
                             runs: runs,
                             ramMin: ramMin,
                             ramMax: ramMax,
@@ -755,18 +750,7 @@
                     var heading = document.createElement("div");
                     heading.className = "tier-heading";
 
-                    var titleParts = [];
-                    if (tier.os !== "Unknown") titleParts.push(tier.os);
-                    if (tier.vcpus != null)
-                        titleParts.push(
-                            tier.vcpus +
-                                " vCPU" +
-                                (tier.vcpus !== 1 ? "s" : ""),
-                        );
-                    var title =
-                        titleParts.length > 0
-                            ? titleParts.join(" \u00b7 ")
-                            : "Unknown Hardware Tier";
+                    var title = tier.os !== "Unknown" ? tier.os : "Unknown OS";
                     heading.innerHTML =
                         esc(title) +
                         '<span class="tier-badge">' +
@@ -780,6 +764,18 @@
                     var meta = document.createElement("div");
                     meta.className = "tier-meta";
                     var metaParts = [];
+                    if (tier.vcpuMin != null && tier.vcpuMax != null) {
+                        if (tier.vcpuMin === tier.vcpuMax) {
+                            metaParts.push(tier.vcpuMin + " vCPUs");
+                        } else {
+                            metaParts.push(
+                                tier.vcpuMin +
+                                    " \u2013 " +
+                                    tier.vcpuMax +
+                                    " vCPUs",
+                            );
+                        }
+                    }
                     if (tier.ramMin != null && tier.ramMax != null) {
                         if (tier.ramMin === tier.ramMax) {
                             metaParts.push(fmtRAM(tier.ramMin) + " RAM");
