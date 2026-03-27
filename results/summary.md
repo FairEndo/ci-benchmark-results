@@ -1,6 +1,6 @@
 # CI Benchmark Results
 
-Last updated: 2026-03-27 20:03:23 UTC
+Last updated: 2026-03-27 20:50:25 UTC
 
 Showing the most recent run per provider/runner combination.
 Full history is available in [`results/raw/`](raw/).
@@ -9,13 +9,13 @@ Full history is available in [`results/raw/`](raw/).
 |----------|--------|--------------------|------------|-----------------|------------|-------------------|-------------|------------------|------------|-----------|-------|-----|
 | circleci | m4pro.large | 14022326.15 events/sec | ±275381.19 | 8745.82 MiB/sec | ±60.11 | 157486.97 | ±3344.55 | 70.70 MB/s | ±4.45 | Apple M4 Pro (Virtual) | 12 | 57344 MB |
 | circleci | m4pro.medium | 13973809.06 events/sec | ±58111.30 | 8944.59 MiB/sec | ±182.76 | 142719.96 | ±5566.92 | 56.85 MB/s | ±8.98 | Apple M4 Pro (Virtual) | 6 | 28672 MB |
-| github-actions | macos-latest | 8615396.88 events/sec | ±326137.82 | 4982.23 MiB/sec | ±475.61 | 57554.60 | ±6539.26 | 98.70 MB/s | ±16.47 | Apple M1 (Virtual) | 3 | 7168 MB |
-| github-actions | macos-14 | 8180800.30 events/sec | ±173591.70 | 5206.81 MiB/sec | ±243.34 | 78979.36 | ±2739.42 | 115.52 MB/s | ±7.60 | Apple M1 (Virtual) | 3 | 7168 MB |
-| github-actions | macos-15-intel | 3427549.19 events/sec | ±140173.32 | 2670.19 MiB/sec | ±187.46 | 49146.78 | ±1379.13 | 131.12 MB/s | ±24.67 | Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz | 4 | 14336 MB |
-| github-actions | ubuntu-24.04-arm | 1499.76 events/sec | ±0.05 | 5334.14 MiB/sec | ±1.71 | 668.54 | ±5.08 | 98.95 MB/s | ±16.18 | unknown | 4 | 15950 MB |
-| github-actions | ubuntu-22.04 | 1444.7 events/sec | ±0.43 | 6020.92 MiB/sec | ±4.44 | 1668.65 | ±109.82 | 148.79 MB/s | ±38.99 | AMD EPYC 7763 64-Core Processor | 4 | 15995 MB |
-| github-actions | ubuntu-24.04 | 1442.20 events/sec | ±0.70 | 6035.38 MiB/sec | ±9.35 | 1390.25 | ±113.27 | 99.93 MB/s | ±20.49 | AMD EPYC 7763 64-Core Processor | 4 | 15993 MB |
-| github-actions | ubuntu-latest | 1441.98 events/sec | ±0.80 | 6031.14 MiB/sec | ±31.26 | 2024.51 | ±18.13 | 70.31 MB/s | ±3.02 | AMD EPYC 7763 64-Core Processor | 4 | 15989 MB |
+| github-actions | macos-14 | 8768539.04 events/sec | ±221477.45 | 5531.80 MiB/sec | ±91.88 | 70803.96 | ±15236.25 | 73.44 MB/s | ±19.32 | Apple M1 (Virtual) | 3 | 7168 MB |
+| github-actions | macos-latest | 8620044.79 events/sec | ±148926.72 | 5590.48 MiB/sec | ±468.89 | 73774.15 | ±2111.35 | 77.31 MB/s | ±10.52 | Apple M1 (Virtual) | 3 | 7168 MB |
+| github-actions | macos-15-intel | 3224344.93 events/sec | ±159319.56 | 2304.31 MiB/sec | ±155.22 | 50154.80 | ±1365.26 | 116.97 MB/s | ±17.45 | Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz | 4 | 14336 MB |
+| github-actions | ubuntu-24.04-arm | 1499.66 events/sec | ±0.19 | 5334.39 MiB/sec | ±2.42 | 683.50 | ±8.47 | 93.31 MB/s | ±18.38 | unknown | 4 | 15950 MB |
+| github-actions | ubuntu-22.04 | 1444.26 events/sec | ±0.22 | 6014.4 MiB/sec | ±7.81 | 2079.84 | ±69.51 | 162.16 MB/s | ±21.19 | AMD EPYC 7763 64-Core Processor | 4 | 15995 MB |
+| github-actions | ubuntu-latest | 1442.43 events/sec | ±0.91 | 6032.52 MiB/sec | ±1.93 | 1732.87 | ±48.18 | 171.30 MB/s | ±35.25 | AMD EPYC 7763 64-Core Processor | 4 | 15993 MB |
+| github-actions | ubuntu-24.04 | 1442.06 events/sec | ±0.30 | 6027.49 MiB/sec | ±180.67 | 1967.08 | ±33.99 | 74.69 MB/s | ±7.94 | AMD EPYC 7763 64-Core Processor | 4 | 15989 MB |
 | circleci | machine.arm.large | 1142.62 events/sec | ±0.38 | 4621.18 MiB/sec | ±3.80 | 784.24 | ±1.23 | 88.44 MB/s | ±16.72 | unknown | 4 | 15671 MB |
 | circleci | machine.arm.medium | 1142.55 events/sec | ±0.23 | 4626.21 MiB/sec | ±3.28 | 783.57 | ±3.24 | 85.76 MB/s | ±18.48 | unknown | 2 | 7761 MB |
 | circleci | machine.xlarge | 1141.04 events/sec | ±0.36 | 6786.28 MiB/sec | ±3.25 | 776.68 | ±1.20 | 106.55 MB/s | ±21.03 | Intel(R) Xeon(R) Platinum 8375C CPU @ 2.90GHz | 8 | 31556 MB |
@@ -28,4 +28,4 @@ Full history is available in [`results/raw/`](raw/).
 | circleci | xlarge | 434.17 events/sec | ±5.58 | 5584.90 MiB/sec | ±169.03 | 4016.18 | ±300.79 | 87.35 MB/s | ±11.38 | Intel(R) Xeon(R) Platinum 8223CL CPU @ 3.00GHz | 36 | 16384 MB |
 
 ---
-*91 total run(s) recorded.*
+*98 total run(s) recorded.*

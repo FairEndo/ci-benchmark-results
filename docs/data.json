@@ -1,5 +1,1468 @@
 [
   {
+    "provider": "github-actions",
+    "runner": "ubuntu-24.04-arm",
+    "timestamp": "2026-03-27T20:40:00Z",
+    "benchmarks": {
+      "cpu": {
+        "tool": "sysbench",
+        "iterations": 5,
+        "scores": [
+          1499.73,
+          1499.37,
+          1499.52,
+          1499.93,
+          1499.60,
+          1499.83
+        ],
+        "median": 1499.66,
+        "min": 1499.37,
+        "max": 1499.93,
+        "stddev": 0.19,
+        "unit": "events/sec"
+      },
+      "memory": {
+        "tool": "sysbench",
+        "iterations": 5,
+        "scores": [
+          5333.67,
+          5337.49,
+          5334.71,
+          5335.61,
+          5334.06,
+          5329.52
+        ],
+        "median": 5334.39,
+        "min": 5329.52,
+        "max": 5337.49,
+        "stddev": 2.42,
+        "unit": "MiB/sec"
+      },
+      "disk": {
+        "tool": "fio",
+        "iterations": 5,
+        "runtime_seconds": 5,
+        "composite": {
+          "scores": [
+            670.05,
+            683.44,
+            695.42,
+            676.10,
+            683.55,
+            690.78
+          ],
+          "median": 683.50,
+          "min": 670.05,
+          "max": 695.42,
+          "stddev": 8.47,
+          "unit": "score"
+        },
+        "seq_read": {
+          "scores": [
+            416.47,
+            417.32,
+            416.92,
+            413.67,
+            416.47,
+            414.45
+          ],
+          "median": 416.47,
+          "min": 413.67,
+          "max": 417.32,
+          "stddev": 1.34,
+          "unit": "MB/s"
+        },
+        "seq_write": {
+          "scores": [
+            138.94,
+            155.71,
+            149.08,
+            134.72,
+            146.31,
+            150.28
+          ],
+          "median": 147.69,
+          "min": 134.72,
+          "max": 155.71,
+          "stddev": 7.06,
+          "unit": "MB/s"
+        },
+        "rand_read": {
+          "scores": [
+            4813.84,
+            4821.84,
+            4913.42,
+            4846.43,
+            4912.62,
+            5002.20
+          ],
+          "median": 4879.52,
+          "min": 4813.84,
+          "max": 5002.20,
+          "stddev": 65.63,
+          "unit": "IOPS"
+        },
+        "rand_write": {
+          "scores": [
+            723.66,
+            696.32,
+            765.85,
+            773.65,
+            729.31,
+            730.85
+          ],
+          "median": 730.08,
+          "min": 696.32,
+          "max": 773.65,
+          "stddev": 26.15,
+          "unit": "IOPS"
+        }
+      },
+      "compile": {
+        "tool": "make",
+        "project": "redis",
+        "project_version": "7.2.7",
+        "iterations": 5,
+        "parallel_jobs": 4,
+        "scores": [
+          42.07,
+          35.75,
+          35.50,
+          35.69,
+          35.67,
+          35.67
+        ],
+        "median": 35.68,
+        "min": 35.50,
+        "max": 42.07,
+        "stddev": 2.39,
+        "unit": "seconds"
+      },
+      "network": {
+        "tool": "curl",
+        "test_url": "https://speed.cloudflare.com/__down?bytes=26214400",
+        "download_bytes": 26214400,
+        "iterations": 5,
+        "composite": {
+          "scores": [
+            72.91,
+            95.58,
+            133.06,
+            91.04,
+            86.93,
+            99.84
+          ],
+          "median": 93.31,
+          "min": 72.91,
+          "max": 133.06,
+          "stddev": 18.38,
+          "unit": "MB/s"
+        },
+        "download": {
+          "scores": [
+            72.91,
+            95.58,
+            133.06,
+            91.04,
+            86.93,
+            99.84
+          ],
+          "median": 93.31,
+          "min": 72.91,
+          "max": 133.06,
+          "stddev": 18.38,
+          "unit": "MB/s"
+        },
+        "latency": {
+          "scores": [
+            102.42,
+            86.07,
+            93.24,
+            91.60,
+            84.79,
+            85.61
+          ],
+          "median": 88.83,
+          "min": 84.79,
+          "max": 102.42,
+          "stddev": 6.15,
+          "unit": "ms"
+        }
+      }
+    },
+    "timing": {
+      "trigger_time": "2026-03-27T20:39:24Z",
+      "job_started_at": "2026-03-27T20:39:29Z",
+      "bench_started_at": "2026-03-27T20:40:00Z",
+      "queue_seconds": 5,
+      "setup_seconds": 31,
+      "total_seconds": 36
+    },
+    "system": {
+      "os": "Ubuntu",
+      "os_version": "Ubuntu 24.04.3 LTS",
+      "arch": "aarch64",
+      "processor": "unknown",
+      "vcpus": 4,
+      "ram_mb": 15950,
+      "load_avg": "0.54, 0.20, 0.07"
+    }
+  },
+  {
+    "provider": "github-actions",
+    "runner": "macos-15-intel",
+    "timestamp": "2026-03-27T20:39:56Z",
+    "benchmarks": {
+      "cpu": {
+        "tool": "sysbench",
+        "iterations": 5,
+        "scores": [
+          2832055.62,
+          3277028.28,
+          3183389.32,
+          3294374.07,
+          3122612.23,
+          3265300.55
+        ],
+        "median": 3224344.93,
+        "min": 2832055.62,
+        "max": 3294374.07,
+        "stddev": 159319.56,
+        "unit": "events/sec"
+      },
+      "memory": {
+        "tool": "sysbench",
+        "iterations": 5,
+        "scores": [
+          2218.88,
+          2389.73,
+          2433.25,
+          2405.41,
+          2095.75,
+          2040.90
+        ],
+        "median": 2304.31,
+        "min": 2040.90,
+        "max": 2433.25,
+        "stddev": 155.22,
+        "unit": "MiB/sec"
+      },
+      "disk": {
+        "tool": "fio",
+        "iterations": 5,
+        "runtime_seconds": 5,
+        "composite": {
+          "scores": [
+            50032.95,
+            50409.31,
+            46738.79,
+            50562.92,
+            50276.65,
+            48643.03
+          ],
+          "median": 50154.80,
+          "min": 46738.79,
+          "max": 50562.92,
+          "stddev": 1365.26,
+          "unit": "score"
+        },
+        "seq_read": {
+          "scores": [
+            8427.11,
+            8550.69,
+            7974.40,
+            8439.11,
+            8259.75,
+            8074.18
+          ],
+          "median": 8343.43,
+          "min": 7974.40,
+          "max": 8550.69,
+          "stddev": 206.58,
+          "unit": "MB/s"
+        },
+        "seq_write": {
+          "scores": [
+            7066.19,
+            7273.34,
+            6005.60,
+            7306.14,
+            7363.13,
+            6884.22
+          ],
+          "median": 7169.76,
+          "min": 6005.60,
+          "max": 7363.13,
+          "stddev": 466.41,
+          "unit": "MB/s"
+        },
+        "rand_read": {
+          "scores": [
+            485629.40,
+            482127.40,
+            472265.60,
+            475988.40,
+            482049.40,
+            464628.00
+          ],
+          "median": 479018.90,
+          "min": 464628.00,
+          "max": 485629.40,
+          "stddev": 7102.56,
+          "unit": "IOPS"
+        },
+        "rand_write": {
+          "scores": [
+            216698.26,
+            215350.60,
+            210993.60,
+            222714.00,
+            217943.81,
+            216782.44
+          ],
+          "median": 216740.35,
+          "min": 210993.60,
+          "max": 222714.00,
+          "stddev": 3466.33,
+          "unit": "IOPS"
+        }
+      },
+      "compile": {
+        "tool": "make",
+        "project": "redis",
+        "project_version": "7.2.7",
+        "iterations": 5,
+        "parallel_jobs": 4,
+        "scores": [
+          39.80,
+          37.88,
+          36.81,
+          37.49,
+          37.41,
+          37.62
+        ],
+        "median": 37.55,
+        "min": 36.81,
+        "max": 39.80,
+        "stddev": 0.94,
+        "unit": "seconds"
+      },
+      "network": {
+        "tool": "curl",
+        "test_url": "https://speed.cloudflare.com/__down?bytes=26214400",
+        "download_bytes": 26214400,
+        "iterations": 5,
+        "composite": {
+          "scores": [
+            113.26,
+            142.28,
+            127.73,
+            108.49,
+            120.67,
+            85.78
+          ],
+          "median": 116.97,
+          "min": 85.78,
+          "max": 142.28,
+          "stddev": 17.45,
+          "unit": "MB/s"
+        },
+        "download": {
+          "scores": [
+            113.26,
+            142.28,
+            127.73,
+            108.49,
+            120.67,
+            85.78
+          ],
+          "median": 116.97,
+          "min": 85.78,
+          "max": 142.28,
+          "stddev": 17.45,
+          "unit": "MB/s"
+        },
+        "latency": {
+          "scores": [
+            80.94,
+            65.47,
+            84.34,
+            89.45,
+            86.35,
+            69.16
+          ],
+          "median": 82.64,
+          "min": 65.47,
+          "max": 89.45,
+          "stddev": 8.90,
+          "unit": "ms"
+        }
+      }
+    },
+    "timing": {
+      "trigger_time": "2026-03-27T20:39:24Z",
+      "job_started_at": "2026-03-27T20:39:29Z",
+      "bench_started_at": "2026-03-27T20:39:55Z",
+      "queue_seconds": 5,
+      "setup_seconds": 26,
+      "total_seconds": 31
+    },
+    "system": {
+      "os": "macOS",
+      "os_version": "macOS 15.7.5",
+      "arch": "x86_64",
+      "processor": "Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz",
+      "vcpus": 4,
+      "ram_mb": 14336,
+      "load_avg": "1.24 7.56 8.10"
+    }
+  },
+  {
+    "provider": "github-actions",
+    "runner": "ubuntu-latest",
+    "timestamp": "2026-03-27T20:39:51Z",
+    "benchmarks": {
+      "cpu": {
+        "tool": "sysbench",
+        "iterations": 5,
+        "scores": [
+          1441.09,
+          1442.15,
+          1440.59,
+          1442.71,
+          1442.90,
+          1442.89
+        ],
+        "median": 1442.43,
+        "min": 1440.59,
+        "max": 1442.90,
+        "stddev": 0.91,
+        "unit": "events/sec"
+      },
+      "memory": {
+        "tool": "sysbench",
+        "iterations": 5,
+        "scores": [
+          6034.62,
+          6032.12,
+          6031.36,
+          6032.92,
+          6031.48,
+          6036.77
+        ],
+        "median": 6032.52,
+        "min": 6031.36,
+        "max": 6036.77,
+        "stddev": 1.93,
+        "unit": "MiB/sec"
+      },
+      "disk": {
+        "tool": "fio",
+        "iterations": 5,
+        "runtime_seconds": 5,
+        "composite": {
+          "scores": [
+            1666.85,
+            1733.59,
+            1732.15,
+            1738.12,
+            1613.30,
+            1742.58
+          ],
+          "median": 1732.87,
+          "min": 1613.30,
+          "max": 1742.58,
+          "stddev": 48.18,
+          "unit": "score"
+        },
+        "seq_read": {
+          "scores": [
+            403.06,
+            416.22,
+            413.72,
+            416.32,
+            414.12,
+            417.03
+          ],
+          "median": 415.17,
+          "min": 403.06,
+          "max": 417.03,
+          "stddev": 4.78,
+          "unit": "MB/s"
+        },
+        "seq_write": {
+          "scores": [
+            415.50,
+            416.07,
+            415.03,
+            414.16,
+            299.52,
+            414.86
+          ],
+          "median": 414.94,
+          "min": 299.52,
+          "max": 416.07,
+          "stddev": 43.09,
+          "unit": "MB/s"
+        },
+        "rand_read": {
+          "scores": [
+            5749.85,
+            5828.03,
+            5625.47,
+            5860.03,
+            5737.45,
+            5705.46
+          ],
+          "median": 5743.65,
+          "min": 5625.47,
+          "max": 5860.03,
+          "stddev": 77.28,
+          "unit": "IOPS"
+        },
+        "rand_write": {
+          "scores": [
+            8016.60,
+            8949.01,
+            9319.61,
+            9032.79,
+            9518.90,
+            9341.33
+          ],
+          "median": 9176.20,
+          "min": 8016.60,
+          "max": 9518.90,
+          "stddev": 492.17,
+          "unit": "IOPS"
+        }
+      },
+      "compile": {
+        "tool": "make",
+        "project": "redis",
+        "project_version": "7.2.7",
+        "iterations": 5,
+        "parallel_jobs": 4,
+        "scores": [
+          54.49,
+          53.23,
+          53.31,
+          53.16,
+          52.89,
+          53.14
+        ],
+        "median": 53.19,
+        "min": 52.89,
+        "max": 54.49,
+        "stddev": 0.52,
+        "unit": "seconds"
+      },
+      "network": {
+        "tool": "curl",
+        "test_url": "https://speed.cloudflare.com/__down?bytes=26214400",
+        "download_bytes": 26214400,
+        "iterations": 5,
+        "composite": {
+          "scores": [
+            157.34,
+            136.15,
+            166.02,
+            249.32,
+            184.86,
+            176.57
+          ],
+          "median": 171.30,
+          "min": 136.15,
+          "max": 249.32,
+          "stddev": 35.25,
+          "unit": "MB/s"
+        },
+        "download": {
+          "scores": [
+            157.34,
+            136.15,
+            166.02,
+            249.32,
+            184.86,
+            176.57
+          ],
+          "median": 171.30,
+          "min": 136.15,
+          "max": 249.32,
+          "stddev": 35.25,
+          "unit": "MB/s"
+        },
+        "latency": {
+          "scores": [
+            64.69,
+            59.12,
+            62.59,
+            147.12,
+            73.75,
+            75.44
+          ],
+          "median": 69.22,
+          "min": 59.12,
+          "max": 147.12,
+          "stddev": 30.38,
+          "unit": "ms"
+        }
+      }
+    },
+    "timing": {
+      "trigger_time": "2026-03-27T20:39:24Z",
+      "job_started_at": "2026-03-27T20:39:31Z",
+      "bench_started_at": "2026-03-27T20:39:51Z",
+      "queue_seconds": 7,
+      "setup_seconds": 20,
+      "total_seconds": 27
+    },
+    "system": {
+      "os": "Ubuntu",
+      "os_version": "Ubuntu 24.04.4 LTS",
+      "arch": "x86_64",
+      "processor": "AMD EPYC 7763 64-Core Processor",
+      "vcpus": 4,
+      "ram_mb": 15993,
+      "load_avg": "1.32, 0.42, 0.15"
+    }
+  },
+  {
+    "provider": "github-actions",
+    "runner": "ubuntu-22.04",
+    "timestamp": "2026-03-27T20:39:51Z",
+    "benchmarks": {
+      "cpu": {
+        "tool": "sysbench",
+        "iterations": 5,
+        "scores": [
+          1444.13,
+          1444.09,
+          1444.12,
+          1444.38,
+          1444.58,
+          1444.6
+        ],
+        "median": 1444.26,
+        "min": 1444.09,
+        "max": 1444.6,
+        "stddev": 0.22,
+        "unit": "events/sec"
+      },
+      "memory": {
+        "tool": "sysbench",
+        "iterations": 5,
+        "scores": [
+          6019.39,
+          6014.94,
+          6012.62,
+          6034.15,
+          6011.02,
+          6013.87
+        ],
+        "median": 6014.4,
+        "min": 6011.02,
+        "max": 6034.15,
+        "stddev": 7.81,
+        "unit": "MiB/sec"
+      },
+      "disk": {
+        "tool": "fio",
+        "iterations": 5,
+        "runtime_seconds": 5,
+        "composite": {
+          "scores": [
+            1905.04,
+            2112.25,
+            2093.26,
+            2093.87,
+            2066.23,
+            2066.41
+          ],
+          "median": 2079.84,
+          "min": 1905.04,
+          "max": 2112.25,
+          "stddev": 69.51,
+          "unit": "score"
+        },
+        "seq_read": {
+          "scores": [
+            406.08,
+            415.89,
+            416.63,
+            416.13,
+            415.97,
+            413.39
+          ],
+          "median": 415.93,
+          "min": 406.08,
+          "max": 416.63,
+          "stddev": 3.7,
+          "unit": "MB/s"
+        },
+        "seq_write": {
+          "scores": [
+            413.52,
+            416.18,
+            416.82,
+            416.58,
+            416.3,
+            416.27
+          ],
+          "median": 416.28,
+          "min": 413.52,
+          "max": 416.82,
+          "stddev": 1.11,
+          "unit": "MB/s"
+        },
+        "rand_read": {
+          "scores": [
+            7697.66,
+            7995.6,
+            7701.66,
+            7830.03,
+            7681.66,
+            7820.44
+          ],
+          "median": 7761.05,
+          "min": 7681.66,
+          "max": 7995.6,
+          "stddev": 110.18,
+          "unit": "IOPS"
+        },
+        "rand_write": {
+          "scores": [
+            10189.52,
+            14383.72,
+            14355.13,
+            14161.57,
+            13702.26,
+            13548.69
+          ],
+          "median": 13931.92,
+          "min": 10189.52,
+          "max": 14383.72,
+          "stddev": 1465.15,
+          "unit": "IOPS"
+        }
+      },
+      "compile": {
+        "tool": "make",
+        "project": "redis",
+        "project_version": "7.2.7",
+        "iterations": 5,
+        "parallel_jobs": 4,
+        "scores": [
+          76.52,
+          66.6,
+          66.78,
+          66.77,
+          66.31,
+          66.43
+        ],
+        "median": 66.69,
+        "min": 66.31,
+        "max": 76.52,
+        "stddev": 3.71,
+        "unit": "seconds"
+      },
+      "network": {
+        "tool": "curl",
+        "test_url": "https://speed.cloudflare.com/__down?bytes=26214400",
+        "download_bytes": 26214400,
+        "iterations": 5,
+        "composite": {
+          "scores": [
+            179.9,
+            162.17,
+            191.03,
+            134.41,
+            162.15,
+            134.05
+          ],
+          "median": 162.16,
+          "min": 134.05,
+          "max": 191.03,
+          "stddev": 21.19,
+          "unit": "MB/s"
+        },
+        "download": {
+          "scores": [
+            179.9,
+            162.17,
+            191.03,
+            134.41,
+            162.15,
+            134.05
+          ],
+          "median": 162.16,
+          "min": 134.05,
+          "max": 191.03,
+          "stddev": 21.19,
+          "unit": "MB/s"
+        },
+        "latency": {
+          "scores": [
+            76.8,
+            114.2,
+            98.35,
+            96.76,
+            120.88,
+            66
+          ],
+          "median": 97.56,
+          "min": 66,
+          "max": 120.88,
+          "stddev": 19.25,
+          "unit": "ms"
+        }
+      }
+    },
+    "timing": {
+      "trigger_time": "2026-03-27T20:39:24Z",
+      "job_started_at": "2026-03-27T20:39:29Z",
+      "bench_started_at": "2026-03-27T20:39:51Z",
+      "queue_seconds": 5,
+      "setup_seconds": 22,
+      "total_seconds": 27
+    },
+    "system": {
+      "os": "Ubuntu",
+      "os_version": "Ubuntu 22.04.5 LTS",
+      "arch": "x86_64",
+      "processor": "AMD EPYC 7763 64-Core Processor",
+      "vcpus": 4,
+      "ram_mb": 15995,
+      "load_avg": "0.74, 0.32, 0.12"
+    }
+  },
+  {
+    "provider": "github-actions",
+    "runner": "ubuntu-24.04",
+    "timestamp": "2026-03-27T20:39:47Z",
+    "benchmarks": {
+      "cpu": {
+        "tool": "sysbench",
+        "iterations": 5,
+        "scores": [
+          1441.99,
+          1442.07,
+          1442.05,
+          1441.54,
+          1442.57,
+          1442.13
+        ],
+        "median": 1442.06,
+        "min": 1441.54,
+        "max": 1442.57,
+        "stddev": 0.30,
+        "unit": "events/sec"
+      },
+      "memory": {
+        "tool": "sysbench",
+        "iterations": 5,
+        "scores": [
+          6031.39,
+          6033.50,
+          6023.59,
+          5546.47,
+          6022.84,
+          6043.25
+        ],
+        "median": 6027.49,
+        "min": 5546.47,
+        "max": 6043.25,
+        "stddev": 180.67,
+        "unit": "MiB/sec"
+      },
+      "disk": {
+        "tool": "fio",
+        "iterations": 5,
+        "runtime_seconds": 5,
+        "composite": {
+          "scores": [
+            1890.09,
+            1950.18,
+            1962.29,
+            1982.62,
+            1996.05,
+            1971.87
+          ],
+          "median": 1967.08,
+          "min": 1890.09,
+          "max": 1996.05,
+          "stddev": 33.99,
+          "unit": "score"
+        },
+        "seq_read": {
+          "scores": [
+            403.30,
+            408.53,
+            417.72,
+            414.72,
+            416.30,
+            416.38
+          ],
+          "median": 415.51,
+          "min": 403.30,
+          "max": 417.72,
+          "stddev": 5.19,
+          "unit": "MB/s"
+        },
+        "seq_write": {
+          "scores": [
+            416.20,
+            414.45,
+            412.95,
+            416.12,
+            416.32,
+            416.48
+          ],
+          "median": 416.16,
+          "min": 412.95,
+          "max": 416.48,
+          "stddev": 1.30,
+          "unit": "MB/s"
+        },
+        "rand_read": {
+          "scores": [
+            7138.37,
+            6966.41,
+            7061.99,
+            7118.38,
+            7301.74,
+            7239.60
+          ],
+          "median": 7128.38,
+          "min": 6966.41,
+          "max": 7301.74,
+          "stddev": 110.11,
+          "unit": "IOPS"
+        },
+        "rand_write": {
+          "scores": [
+            10651.27,
+            12262.95,
+            12171.40,
+            12577.68,
+            12543.69,
+            12042.39
+          ],
+          "median": 12217.17,
+          "min": 10651.27,
+          "max": 12577.68,
+          "stddev": 650.43,
+          "unit": "IOPS"
+        }
+      },
+      "compile": {
+        "tool": "make",
+        "project": "redis",
+        "project_version": "7.2.7",
+        "iterations": 5,
+        "parallel_jobs": 4,
+        "scores": [
+          54.66,
+          53.58,
+          54.22,
+          53.82,
+          53.31,
+          53.38
+        ],
+        "median": 53.70,
+        "min": 53.31,
+        "max": 54.66,
+        "stddev": 0.48,
+        "unit": "seconds"
+      },
+      "network": {
+        "tool": "curl",
+        "test_url": "https://speed.cloudflare.com/__down?bytes=26214400",
+        "download_bytes": 26214400,
+        "iterations": 5,
+        "composite": {
+          "scores": [
+            73.98,
+            85.78,
+            75.40,
+            85.84,
+            67.55,
+            65.47
+          ],
+          "median": 74.69,
+          "min": 65.47,
+          "max": 85.84,
+          "stddev": 7.94,
+          "unit": "MB/s"
+        },
+        "download": {
+          "scores": [
+            73.98,
+            85.78,
+            75.40,
+            85.84,
+            67.55,
+            65.47
+          ],
+          "median": 74.69,
+          "min": 65.47,
+          "max": 85.84,
+          "stddev": 7.94,
+          "unit": "MB/s"
+        },
+        "latency": {
+          "scores": [
+            102.94,
+            91.61,
+            85.36,
+            85.36,
+            96.02,
+            113.04
+          ],
+          "median": 93.81,
+          "min": 85.36,
+          "max": 113.04,
+          "stddev": 9.86,
+          "unit": "ms"
+        }
+      }
+    },
+    "timing": {
+      "trigger_time": "2026-03-27T20:39:24Z",
+      "job_started_at": "2026-03-27T20:39:29Z",
+      "bench_started_at": "2026-03-27T20:39:46Z",
+      "queue_seconds": 5,
+      "setup_seconds": 17,
+      "total_seconds": 22
+    },
+    "system": {
+      "os": "Ubuntu",
+      "os_version": "Ubuntu 24.04.4 LTS",
+      "arch": "x86_64",
+      "processor": "AMD EPYC 7763 64-Core Processor",
+      "vcpus": 4,
+      "ram_mb": 15989,
+      "load_avg": "1.10, 0.31, 0.11"
+    }
+  },
+  {
+    "provider": "github-actions",
+    "runner": "macos-14",
+    "timestamp": "2026-03-27T20:39:44Z",
+    "benchmarks": {
+      "cpu": {
+        "tool": "sysbench",
+        "iterations": 5,
+        "scores": [
+          8526682.11,
+          8758099.36,
+          8778978.71,
+          9023368.62,
+          9209654.06,
+          8715192.71
+        ],
+        "median": 8768539.04,
+        "min": 8526682.11,
+        "max": 9209654.06,
+        "stddev": 221477.45,
+        "unit": "events/sec"
+      },
+      "memory": {
+        "tool": "sysbench",
+        "iterations": 5,
+        "scores": [
+          5354.16,
+          5346.45,
+          5543.58,
+          5537.84,
+          5525.76,
+          5566.62
+        ],
+        "median": 5531.80,
+        "min": 5346.45,
+        "max": 5566.62,
+        "stddev": 91.88,
+        "unit": "MiB/sec"
+      },
+      "disk": {
+        "tool": "fio",
+        "iterations": 5,
+        "runtime_seconds": 5,
+        "composite": {
+          "scores": [
+            91678.16,
+            90373.87,
+            53926.28,
+            56021.25,
+            64337.85,
+            77270.08
+          ],
+          "median": 70803.96,
+          "min": 53926.28,
+          "max": 91678.16,
+          "stddev": 15236.25,
+          "unit": "score"
+        },
+        "seq_read": {
+          "scores": [
+            14199.56,
+            14162.97,
+            15212.76,
+            9502.90,
+            10159.37,
+            11445.51
+          ],
+          "median": 12804.24,
+          "min": 9502.90,
+          "max": 15212.76,
+          "stddev": 2182.10,
+          "unit": "MB/s"
+        },
+        "seq_write": {
+          "scores": [
+            13810.64,
+            14380.12,
+            8332.73,
+            8839.03,
+            9465.91,
+            12647.27
+          ],
+          "median": 11056.59,
+          "min": 8332.73,
+          "max": 14380.12,
+          "stddev": 2443.12,
+          "unit": "MB/s"
+        },
+        "rand_read": {
+          "scores": [
+            901077.00,
+            829147.57,
+            552221.20,
+            393299.14,
+            505592.68,
+            647577.88
+          ],
+          "median": 599899.54,
+          "min": 393299.14,
+          "max": 901077.00,
+          "stddev": 178235.20,
+          "unit": "IOPS"
+        },
+        "rand_write": {
+          "scores": [
+            399772.60,
+            395023.40,
+            120807.40,
+            298144.97,
+            352400.32,
+            380295.74
+          ],
+          "median": 366348.03,
+          "min": 120807.40,
+          "max": 399772.60,
+          "stddev": 97225.10,
+          "unit": "IOPS"
+        }
+      },
+      "compile": {
+        "tool": "make",
+        "project": "redis",
+        "project_version": "7.2.7",
+        "iterations": 5,
+        "parallel_jobs": 3,
+        "scores": [
+          25.52,
+          23.47,
+          22.65,
+          22.48,
+          21.56,
+          22.74
+        ],
+        "median": 22.70,
+        "min": 21.56,
+        "max": 25.52,
+        "stddev": 1.23,
+        "unit": "seconds"
+      },
+      "network": {
+        "tool": "curl",
+        "test_url": "https://speed.cloudflare.com/__down?bytes=26214400",
+        "download_bytes": 26214400,
+        "iterations": 5,
+        "composite": {
+          "scores": [
+            42.87,
+            71.89,
+            74.84,
+            88.10,
+            72.04,
+            107.03
+          ],
+          "median": 73.44,
+          "min": 42.87,
+          "max": 107.03,
+          "stddev": 19.32,
+          "unit": "MB/s"
+        },
+        "download": {
+          "scores": [
+            42.87,
+            71.89,
+            74.84,
+            88.10,
+            72.04,
+            107.03
+          ],
+          "median": 73.44,
+          "min": 42.87,
+          "max": 107.03,
+          "stddev": 19.32,
+          "unit": "MB/s"
+        },
+        "latency": {
+          "scores": [
+            81.61,
+            109.74,
+            78.64,
+            98.60,
+            110.58,
+            65.95
+          ],
+          "median": 90.10,
+          "min": 65.95,
+          "max": 110.58,
+          "stddev": 16.64,
+          "unit": "ms"
+        }
+      }
+    },
+    "timing": {
+      "trigger_time": "2026-03-27T20:39:24Z",
+      "job_started_at": "2026-03-27T20:39:29Z",
+      "bench_started_at": "2026-03-27T20:39:44Z",
+      "queue_seconds": 5,
+      "setup_seconds": 15,
+      "total_seconds": 20
+    },
+    "system": {
+      "os": "macOS",
+      "os_version": "macOS 14.8.4",
+      "arch": "arm64",
+      "processor": "Apple M1 (Virtual)",
+      "vcpus": 3,
+      "ram_mb": 7168,
+      "load_avg": "15.29 16.97 8.23"
+    }
+  },
+  {
+    "provider": "github-actions",
+    "runner": "macos-latest",
+    "timestamp": "2026-03-27T20:39:43Z",
+    "benchmarks": {
+      "cpu": {
+        "tool": "sysbench",
+        "iterations": 5,
+        "scores": [
+          8797953.51,
+          8797728.96,
+          8543043.84,
+          8590769.96,
+          8649319.61,
+          8370349.33
+        ],
+        "median": 8620044.79,
+        "min": 8370349.33,
+        "max": 8797953.51,
+        "stddev": 148926.72,
+        "unit": "events/sec"
+      },
+      "memory": {
+        "tool": "sysbench",
+        "iterations": 5,
+        "scores": [
+          5497.03,
+          5771.50,
+          5739.81,
+          5457.27,
+          5683.94,
+          4411.73
+        ],
+        "median": 5590.48,
+        "min": 4411.73,
+        "max": 5771.50,
+        "stddev": 468.89,
+        "unit": "MiB/sec"
+      },
+      "disk": {
+        "tool": "fio",
+        "iterations": 5,
+        "runtime_seconds": 5,
+        "composite": {
+          "scores": [
+            71915.35,
+            74828.47,
+            73703.40,
+            68590.59,
+            73844.90,
+            74298.88
+          ],
+          "median": 73774.15,
+          "min": 68590.59,
+          "max": 74828.47,
+          "stddev": 2111.35,
+          "unit": "score"
+        },
+        "seq_read": {
+          "scores": [
+            11187.16,
+            12397.32,
+            12668.47,
+            12614.08,
+            13039.19,
+            12396.32
+          ],
+          "median": 12505.70,
+          "min": 11187.16,
+          "max": 13039.19,
+          "stddev": 576.76,
+          "unit": "MB/s"
+        },
+        "seq_write": {
+          "scores": [
+            8817.24,
+            9075.58,
+            8411.32,
+            9310.94,
+            8395.12,
+            9183.36
+          ],
+          "median": 8946.41,
+          "min": 8395.12,
+          "max": 9310.94,
+          "stddev": 359.04,
+          "unit": "MB/s"
+        },
+        "rand_read": {
+          "scores": [
+            775704.00,
+            733856.63,
+            751737.05,
+            699646.00,
+            672330.00,
+            695302.60
+          ],
+          "median": 716751.31,
+          "min": 672330.00,
+          "max": 775704.00,
+          "stddev": 35558.87,
+          "unit": "IOPS"
+        },
+        "rand_write": {
+          "scores": [
+            349573.00,
+            379711.80,
+            368379.72,
+            269358.53,
+            404037.80,
+            385000.00
+          ],
+          "median": 374045.76,
+          "min": 269358.53,
+          "max": 404037.80,
+          "stddev": 43483.93,
+          "unit": "IOPS"
+        }
+      },
+      "compile": {
+        "tool": "make",
+        "project": "redis",
+        "project_version": "7.2.7",
+        "iterations": 5,
+        "parallel_jobs": 3,
+        "scores": [
+          22.59,
+          17.24,
+          17.76,
+          15.86,
+          17.63,
+          16.38
+        ],
+        "median": 17.43,
+        "min": 15.86,
+        "max": 22.59,
+        "stddev": 2.20,
+        "unit": "seconds"
+      },
+      "network": {
+        "tool": "curl",
+        "test_url": "https://speed.cloudflare.com/__down?bytes=26214400",
+        "download_bytes": 26214400,
+        "iterations": 5,
+        "composite": {
+          "scores": [
+            82.94,
+            74.72,
+            74.53,
+            98.40,
+            79.91,
+            63.74
+          ],
+          "median": 77.31,
+          "min": 63.74,
+          "max": 98.40,
+          "stddev": 10.52,
+          "unit": "MB/s"
+        },
+        "download": {
+          "scores": [
+            82.94,
+            74.72,
+            74.53,
+            98.40,
+            79.91,
+            63.74
+          ],
+          "median": 77.31,
+          "min": 63.74,
+          "max": 98.40,
+          "stddev": 10.52,
+          "unit": "MB/s"
+        },
+        "latency": {
+          "scores": [
+            80.63,
+            74.18,
+            85.28,
+            109.97,
+            148.98,
+            92.18
+          ],
+          "median": 88.73,
+          "min": 74.18,
+          "max": 148.98,
+          "stddev": 25.18,
+          "unit": "ms"
+        }
+      }
+    },
+    "timing": {
+      "trigger_time": "2026-03-27T20:39:24Z",
+      "job_started_at": "2026-03-27T20:39:28Z",
+      "bench_started_at": "2026-03-27T20:39:43Z",
+      "queue_seconds": 4,
+      "setup_seconds": 15,
+      "total_seconds": 19
+    },
+    "system": {
+      "os": "macOS",
+      "os_version": "macOS 15.7.4",
+      "arch": "arm64",
+      "processor": "Apple M1 (Virtual)",
+      "vcpus": 3,
+      "ram_mb": 7168,
+      "load_avg": "10.67 21.53 11.95"
+    }
+  },
+  {
     "provider": "circleci",
     "runner": "machine.arm.large",
     "timestamp": "2026-03-27T19:49:37Z",
