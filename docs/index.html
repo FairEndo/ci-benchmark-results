@@ -188,7 +188,7 @@
 
             .about-card .about-grid {
                 display: grid;
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
                 gap: 20px;
             }
 
@@ -231,7 +231,7 @@
             /* Charts Grid */
             .charts-grid {
                 display: grid;
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
                 gap: 28px;
                 margin-bottom: 28px;
             }
@@ -244,6 +244,29 @@
 
             .chart-container canvas {
                 width: 100% !important;
+            }
+
+            .disk-detail-table {
+                width: 100%;
+                margin-top: 12px;
+                font-size: 0.85rem;
+            }
+
+            .disk-detail-table th {
+                text-align: left;
+                font-weight: 600;
+                color: var(--text-secondary);
+                padding: 4px 10px;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .disk-detail-table td {
+                padding: 4px 10px;
+                font-variant-numeric: tabular-nums;
+            }
+
+            .disk-detail-table td.num {
+                text-align: right;
             }
 
             /* Tier sections */
@@ -490,6 +513,17 @@
                                 fast as possible, reported in MiB/sec. Higher is
                                 better&mdash;it reflects memory bandwidth
                                 available to your CI jobs.
+                            </p>
+                        </div>
+                        <div class="about-item">
+                            <h3>&#128191; Disk I/O</h3>
+                            <p>
+                                Measured with <code>fio</code>. Runs sequential
+                                and random read/write workloads, reported as
+                                MB/s and IOPS. The composite score combines all
+                                four sub-tests. Higher is better&mdash;only
+                                available on runners where <code>fio</code> is
+                                installed.
                             </p>
                         </div>
                         <div class="about-item">
@@ -892,12 +926,97 @@
                     memCard.appendChild(memChartDiv);
                     chartsGrid.appendChild(memCard);
 
+                    /* Disk composite bar chart (only if any run has disk data) */
+                    var hasDisk = sorted.some(function (r) {
+                        return (
+                            r.benchmarks &&
+                            r.benchmarks.disk &&
+                            r.benchmarks.disk.composite
+                        );
+                    });
+                    if (hasDisk) {
+                        var diskCard = document.createElement("section");
+                        diskCard.className = "card";
+                        var diskH2 = document.createElement("h2");
+                        diskH2.textContent = "Disk I/O Performance";
+                        diskCard.appendChild(diskH2);
+                        var diskDesc = document.createElement("p");
+                        diskDesc.className = "section-desc";
+                        diskDesc.innerHTML =
+                            "Composite <code>fio</code> score combining sequential &amp; random I/O. " +
+                            "Higher is better. Runners without disk benchmarks are omitted.";
+                        diskCard.appendChild(diskDesc);
+                        var diskChartDiv = document.createElement("div");
+                        diskChartDiv.className = "chart-container";
+                        var diskCanvas = document.createElement("canvas");
+                        diskCanvas.id = "disk-bar-tier-" + tierIndex;
+                        diskChartDiv.appendChild(diskCanvas);
+                        diskCard.appendChild(diskChartDiv);
+
+                        /* Disk detail table */
+                        var diskDetailDiv = document.createElement("div");
+                        diskDetailDiv.style.overflowX = "auto";
+                        var diskTable = document.createElement("table");
+                        diskTable.className = "disk-detail-table";
+                        var dtHead =
+                            "<thead><tr><th>Runner</th><th>Seq Read</th><th>Seq Write</th><th>Rand Read</th><th>Rand Write</th></tr></thead>";
+                        var dtBody = "<tbody>";
+                        sorted.forEach(function (run) {
+                            var d =
+                                run.benchmarks && run.benchmarks.disk
+                                    ? run.benchmarks.disk
+                                    : null;
+                            if (!d) return;
+                            var sr = d.seq_read
+                                ? fmtNum(d.seq_read.median) +
+                                  " " +
+                                  d.seq_read.unit
+                                : "\u2014";
+                            var sw = d.seq_write
+                                ? fmtNum(d.seq_write.median) +
+                                  " " +
+                                  d.seq_write.unit
+                                : "\u2014";
+                            var rr = d.rand_read
+                                ? fmtNum(d.rand_read.median) +
+                                  " " +
+                                  d.rand_read.unit
+                                : "\u2014";
+                            var rw = d.rand_write
+                                ? fmtNum(d.rand_write.median) +
+                                  " " +
+                                  d.rand_write.unit
+                                : "\u2014";
+                            dtBody +=
+                                "<tr><td>" +
+                                esc(shortLabel(run)) +
+                                '</td><td class="num">' +
+                                sr +
+                                '</td><td class="num">' +
+                                sw +
+                                '</td><td class="num">' +
+                                rr +
+                                '</td><td class="num">' +
+                                rw +
+                                "</td></tr>";
+                        });
+                        dtBody += "</tbody>";
+                        diskTable.innerHTML = dtHead + dtBody;
+                        diskDetailDiv.appendChild(diskTable);
+                        diskCard.appendChild(diskDetailDiv);
+
+                        chartsGrid.appendChild(diskCard);
+                    }
+
                     section.appendChild(chartsGrid);
                     container.appendChild(section);
 
                     /* Render the charts */
                     renderCPUBar(sorted, "cpu-bar-tier-" + tierIndex);
                     renderMemBar(sorted, "mem-bar-tier-" + tierIndex);
+                    if (hasDisk) {
+                        renderDiskBar(sorted, "disk-bar-tier-" + tierIndex);
+                    }
                 }
 
                 /* ---- Bar Charts ---- */
@@ -1151,6 +1270,125 @@
                                     title: {
                                         display: true,
                                         text: "MiB/sec",
+                                        color: "#a0a0b8",
+                                    },
+                                },
+                                y: {
+                                    grid: { display: false },
+                                    ticks: {
+                                        color: "#e0e0e0",
+                                        font: { size: 11 },
+                                    },
+                                },
+                            },
+                        },
+                        plugins: [errorBarsPlugin],
+                    });
+                }
+
+                function renderDiskBar(tierRuns, canvasId) {
+                    var withDisk = tierRuns.filter(function (r) {
+                        return (
+                            r.benchmarks &&
+                            r.benchmarks.disk &&
+                            r.benchmarks.disk.composite
+                        );
+                    });
+
+                    var canvas = document.getElementById(canvasId);
+                    if (!canvas) return;
+
+                    if (withDisk.length === 0) {
+                        var parent = canvas.parentElement;
+                        parent.innerHTML =
+                            '<p style="text-align:center;color:var(--text-secondary);padding:60px 0;">No disk benchmark data available.</p>';
+                        return;
+                    }
+
+                    var sorted = withDisk.slice().sort(function (a, b) {
+                        return (
+                            b.benchmarks.disk.composite.median -
+                            a.benchmarks.disk.composite.median
+                        );
+                    });
+
+                    var labels = [];
+                    var medians = [];
+                    var mins = [];
+                    var maxs = [];
+                    var colors = [];
+
+                    sorted.forEach(function (run, i) {
+                        var comp = run.benchmarks.disk.composite;
+                        labels.push(shortLabel(run));
+                        medians.push(comp.median);
+                        mins.push(comp.median - comp.min);
+                        maxs.push(comp.max - comp.median);
+                        colors.push(chartColors(i));
+                    });
+
+                    var ctx = canvas.getContext("2d");
+                    new Chart(ctx, {
+                        type: "bar",
+                        data: {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: "Disk Composite Score",
+                                    data: medians,
+                                    backgroundColor: colors.map(function (c) {
+                                        return c + "cc";
+                                    }),
+                                    borderColor: colors,
+                                    borderWidth: 2,
+                                    borderRadius: 6,
+                                    errorBars: { mins: mins, maxs: maxs },
+                                },
+                            ],
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            indexAxis: "y",
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    backgroundColor: "#16213e",
+                                    titleColor: "#f5f5f5",
+                                    bodyColor: "#e0e0e0",
+                                    borderColor: "#2a2a4a",
+                                    borderWidth: 1,
+                                    callbacks: {
+                                        label: function (ctx) {
+                                            var ds = ctx.dataset;
+                                            var idx = ctx.dataIndex;
+                                            var errMin = ds.errorBars
+                                                ? ds.errorBars.mins[idx]
+                                                : 0;
+                                            var errMax = ds.errorBars
+                                                ? ds.errorBars.maxs[idx]
+                                                : 0;
+                                            var val = ctx.parsed.x;
+                                            return (
+                                                "Median: " +
+                                                fmtNum(val) +
+                                                "  (min: " +
+                                                fmtNum(val - errMin) +
+                                                ", max: " +
+                                                fmtNum(val + errMax) +
+                                                ")"
+                                            );
+                                        },
+                                    },
+                                },
+                            },
+                            scales: {
+                                x: {
+                                    grid: { color: "rgba(255,255,255,0.06)" },
+                                    ticks: { color: "#a0a0b8" },
+                                    title: {
+                                        display: true,
+                                        text: "Composite Score",
                                         color: "#a0a0b8",
                                     },
                                 },
