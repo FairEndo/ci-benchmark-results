@@ -269,6 +269,29 @@
                 text-align: right;
             }
 
+            .runner-info-table {
+                width: 100%;
+                margin-top: 8px;
+                font-size: 0.85rem;
+            }
+
+            .runner-info-table th {
+                text-align: left;
+                font-weight: 600;
+                color: var(--text-secondary);
+                padding: 4px 10px;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .runner-info-table td {
+                padding: 4px 10px;
+            }
+
+            .runner-info-table td.processor-cell {
+                font-family: monospace;
+                font-size: 0.82rem;
+            }
+
             /* Tier sections */
             .tier-section {
                 margin-bottom: 48px;
@@ -530,10 +553,12 @@
                             <h3>&#9201; Timing &amp; Queue</h3>
                             <p>
                                 Tracks the full lifecycle of each CI
-                                job&mdash;from trigger to completion. Queue time
-                                is how long the job waited before a runner
-                                picked it up. Run time is actual execution. Both
-                                matter for real-world CI speed.
+                                job&mdash;from trigger to bench completion.
+                                Includes queue time (waiting for a runner),
+                                setup time (installing dependencies before
+                                benchmarks start), and the exact moment
+                                benchmarks begin. All three matter for
+                                real-world CI speed.
                             </p>
                         </div>
                         <div class="about-item">
@@ -543,6 +568,17 @@
                                 regressions or improvements. The timeline chart
                                 plots CPU median scores across all runs, grouped
                                 by provider and runner.
+                            </p>
+                        </div>
+                        <div class="about-item">
+                            <h3>&#128296; System Context</h3>
+                            <p>
+                                Each run records the processor model and system
+                                load average. The processor name explains why
+                                scores differ across runners. The load average
+                                at benchmark time reveals whether the runner was
+                                under contention&mdash;high load on shared
+                                runners can skew results.
                             </p>
                         </div>
                     </div>
@@ -1017,6 +1053,53 @@
                     if (hasDisk) {
                         renderDiskBar(sorted, "disk-bar-tier-" + tierIndex);
                     }
+
+                    /* Runner hardware info card */
+                    var infoCard = document.createElement("section");
+                    infoCard.className = "card";
+                    var infoH2 = document.createElement("h2");
+                    infoH2.textContent = "Runner Hardware";
+                    infoCard.appendChild(infoH2);
+                    var infoDesc = document.createElement("p");
+                    infoDesc.className = "section-desc";
+                    infoDesc.innerHTML =
+                        "Processor model reported by each runner. Differences in CPU model explain " +
+                        "performance variations between runners within the same tier.";
+                    infoCard.appendChild(infoDesc);
+                    var infoWrap = document.createElement("div");
+                    infoWrap.style.overflowX = "auto";
+                    var infoTable = document.createElement("table");
+                    infoTable.className = "runner-info-table";
+                    var itHead =
+                        "<thead><tr><th>Provider</th><th>Runner</th><th>Processor</th><th>Arch</th><th>vCPUs</th><th>RAM</th></tr></thead>";
+                    var itBody = "<tbody>";
+                    sorted.forEach(function (run) {
+                        var sys = run.system || {};
+                        itBody +=
+                            '<tr><td><span class="provider-badge">' +
+                            esc(run.provider) +
+                            "</span></td>" +
+                            "<td>" +
+                            esc(run.runner) +
+                            "</td>" +
+                            '<td class="processor-cell">' +
+                            esc(sys.processor || "\u2014") +
+                            "</td>" +
+                            "<td>" +
+                            esc(sys.arch || "\u2014") +
+                            "</td>" +
+                            "<td>" +
+                            (sys.vcpus != null ? sys.vcpus : "\u2014") +
+                            "</td>" +
+                            "<td>" +
+                            fmtRAM(sys.ram_mb) +
+                            "</td></tr>";
+                    });
+                    itBody += "</tbody>";
+                    infoTable.innerHTML = itHead + itBody;
+                    infoWrap.appendChild(infoTable);
+                    infoCard.appendChild(infoWrap);
+                    section.appendChild(infoCard);
                 }
 
                 /* ---- Bar Charts ---- */
@@ -1572,6 +1655,12 @@
                         "Queued Time = Started At \u2013 Created At, " +
                         "Run Time = Total \u2013 Queued. " +
                         "<strong>Reported</strong> values come directly from the CI provider\u2019s API. " +
+                        "<strong>Setup Time</strong> is the time between job start and benchmark start, " +
+                        "covering dependency installs and environment preparation. " +
+                        "<strong>Bench Started At</strong> is the exact moment benchmarks begin executing " +
+                        "(after setup completes). " +
+                        "<strong>Load Avg</strong> is the system load average at the time of benchmarking \u2014 " +
+                        "high values on shared runners may indicate resource contention affecting results. " +
                         "Queue times are color-coded: " +
                         '<span style="color:#2a9d8f">green</span> &lt; 60s, ' +
                         '<span style="color:#f77f00">orange</span> 60\u2013120s, ' +
@@ -1591,6 +1680,11 @@
                         { key: "runner", label: "Runner", type: "text" },
                         { key: "createdAt", label: "Created At", type: "date" },
                         { key: "startedAt", label: "Started At", type: "date" },
+                        {
+                            key: "benchStartedAt",
+                            label: "Bench Started At",
+                            type: "date",
+                        },
                         { key: "stoppedAt", label: "Stopped At", type: "date" },
                         {
                             key: "totalTime",
@@ -1608,6 +1702,11 @@
                             type: "num",
                         },
                         {
+                            key: "setupTime",
+                            label: "Setup Time (s)",
+                            type: "num",
+                        },
+                        {
                             key: "reportedDur",
                             label: "Reported Duration (s)",
                             type: "num",
@@ -1617,6 +1716,7 @@
                             label: "Reported Queued Time (s)",
                             type: "num",
                         },
+                        { key: "loadAvg", label: "Load Avg", type: "text" },
                     ];
 
                     /* Build row data */
@@ -1624,6 +1724,13 @@
                         var t = run.timing || {};
                         var createdAt = t.trigger_time || null;
                         var startedAt = t.job_started_at || null;
+                        var benchStartedAt = t.bench_started_at || null;
+                        var setupTime =
+                            t.setup_seconds != null ? t.setup_seconds : null;
+                        var loadAvg =
+                            run.system && run.system.load_avg
+                                ? run.system.load_avg
+                                : null;
 
                         var totalTime =
                             t.total_seconds != null ? t.total_seconds : null;
@@ -1662,12 +1769,15 @@
                             runner: run.runner || "\u2014",
                             createdAt: createdAt,
                             startedAt: startedAt,
+                            benchStartedAt: benchStartedAt,
                             stoppedAt: stoppedAt,
                             totalTime: totalTime,
                             queuedTime: queuedTime,
                             runTime: runTime,
+                            setupTime: setupTime,
                             reportedDur: reportedDur,
                             reportedQueued: reportedQueued,
+                            loadAvg: loadAvg,
                         };
                     });
 
@@ -1789,6 +1899,9 @@
                                 fmtDateShort(row.startedAt) +
                                 "</td>" +
                                 "<td>" +
+                                fmtDateShort(row.benchStartedAt) +
+                                "</td>" +
+                                "<td>" +
                                 fmtDateShort(row.stoppedAt) +
                                 "</td>" +
                                 '<td class="timing-cell">' +
@@ -1803,10 +1916,18 @@
                                 fmtSec(row.runTime) +
                                 "</td>" +
                                 '<td class="timing-cell">' +
+                                fmtSec(row.setupTime) +
+                                "</td>" +
+                                '<td class="timing-cell">' +
                                 fmtSec(row.reportedDur) +
                                 "</td>" +
                                 '<td class="timing-cell">' +
                                 fmtSec(row.reportedQueued) +
+                                "</td>" +
+                                "<td>" +
+                                (row.loadAvg
+                                    ? esc(row.loadAvg)
+                                    : '<span class="na">\u2014</span>') +
                                 "</td>";
                             tbody.appendChild(tr);
                         });
