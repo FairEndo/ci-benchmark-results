@@ -1,0 +1,198 @@
+{
+  "provider": "github-actions",
+  "runner": "ubuntu-22.04",
+  "timestamp": "2026-03-27T19:48:53Z",
+  "benchmarks": {
+    "cpu": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        1443.66,
+        1444.66,
+        1444.74,
+        1444.81,
+        1444.7
+      ],
+      "median": 1444.7,
+      "min": 1443.66,
+      "max": 1444.81,
+      "stddev": 0.43,
+      "unit": "events/sec"
+    },
+    "memory": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        6015.44,
+        6022.4,
+        6020.92,
+        6027.89,
+        6016.66
+      ],
+      "median": 6020.92,
+      "min": 6015.44,
+      "max": 6027.89,
+      "stddev": 4.44,
+      "unit": "MiB/sec"
+    },
+    "disk": {
+      "tool": "fio",
+      "iterations": 5,
+      "runtime_seconds": 5,
+      "composite": {
+        "scores": [
+          1654.88,
+          1668.65,
+          1837.85,
+          1500.32,
+          1728.62
+        ],
+        "median": 1668.65,
+        "min": 1500.32,
+        "max": 1837.85,
+        "stddev": 109.82,
+        "unit": "score"
+      },
+      "seq_read": {
+        "scores": [
+          415.56,
+          416.3,
+          416.55,
+          413.63,
+          416.3
+        ],
+        "median": 416.3,
+        "min": 413.63,
+        "max": 416.55,
+        "stddev": 1.07,
+        "unit": "MB/s"
+      },
+      "seq_write": {
+        "scores": [
+          417.32,
+          416.82,
+          413.22,
+          417.1,
+          416.15
+        ],
+        "median": 416.82,
+        "min": 413.22,
+        "max": 417.32,
+        "stddev": 1.5,
+        "unit": "MB/s"
+      },
+      "rand_read": {
+        "scores": [
+          5327.93,
+          5237.75,
+          6412.72,
+          4613.28,
+          5942.21
+        ],
+        "median": 5327.93,
+        "min": 4613.28,
+        "max": 6412.72,
+        "stddev": 618.55,
+        "unit": "IOPS"
+      },
+      "rand_write": {
+        "scores": [
+          8117.18,
+          8530.29,
+          10335.93,
+          6366.13,
+          8673.4
+        ],
+        "median": 8530.29,
+        "min": 6366.13,
+        "max": 10335.93,
+        "stddev": 1269.34,
+        "unit": "IOPS"
+      }
+    },
+    "compile": {
+      "tool": "make",
+      "project": "redis",
+      "project_version": "7.2.7",
+      "iterations": 5,
+      "parallel_jobs": 4,
+      "scores": [
+        65.91,
+        66.13,
+        66.32,
+        66.13,
+        65.61
+      ],
+      "median": 66.13,
+      "min": 65.61,
+      "max": 66.32,
+      "stddev": 0.24,
+      "unit": "seconds"
+    },
+    "network": {
+      "tool": "curl",
+      "test_url": "https://speed.cloudflare.com/__down?bytes=26214400",
+      "download_bytes": 26214400,
+      "iterations": 5,
+      "composite": {
+        "scores": [
+          101.63,
+          199.86,
+          148.79,
+          111.91,
+          186.38
+        ],
+        "median": 148.79,
+        "min": 101.63,
+        "max": 199.86,
+        "stddev": 38.99,
+        "unit": "MB/s"
+      },
+      "download": {
+        "scores": [
+          101.63,
+          199.86,
+          148.79,
+          111.91,
+          186.38
+        ],
+        "median": 148.79,
+        "min": 101.63,
+        "max": 199.86,
+        "stddev": 38.99,
+        "unit": "MB/s"
+      },
+      "latency": {
+        "scores": [
+          70.61,
+          85.56,
+          68.83,
+          93.22,
+          81.77
+        ],
+        "median": 81.77,
+        "min": 68.83,
+        "max": 93.22,
+        "stddev": 9.18,
+        "unit": "ms"
+      }
+    }
+  },
+  "timing": {
+    "trigger_time": "2026-03-27T19:48:32Z",
+    "job_started_at": "2026-03-27T19:48:37Z",
+    "bench_started_at": "2026-03-27T19:48:53Z",
+    "queue_seconds": 5,
+    "setup_seconds": 16,
+    "total_seconds": 21
+  },
+  "system": {
+    "os": "Ubuntu",
+    "os_version": "Ubuntu 22.04.5 LTS",
+    "arch": "x86_64",
+    "processor": "AMD EPYC 7763 64-Core Processor",
+    "vcpus": 4,
+    "ram_mb": 15995,
+    "load_avg": "0.39, 0.15, 0.05"
+  }
+}
