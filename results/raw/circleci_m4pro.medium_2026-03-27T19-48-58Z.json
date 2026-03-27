@@ -1,0 +1,198 @@
+{
+  "provider": "circleci",
+  "runner": "m4pro.medium",
+  "timestamp": "2026-03-27T19:48:58Z",
+  "benchmarks": {
+    "cpu": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        14028273.02,
+        14068708.40,
+        13973809.06,
+        13904045.13,
+        13948578.28
+      ],
+      "median": 13973809.06,
+      "min": 13904045.13,
+      "max": 14068708.40,
+      "stddev": 58111.30,
+      "unit": "events/sec"
+    },
+    "memory": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        8944.59,
+        8954.09,
+        8822.06,
+        8977.14,
+        8487.92
+      ],
+      "median": 8944.59,
+      "min": 8487.92,
+      "max": 8977.14,
+      "stddev": 182.76,
+      "unit": "MiB/sec"
+    },
+    "disk": {
+      "tool": "fio",
+      "iterations": 5,
+      "runtime_seconds": 5,
+      "composite": {
+        "scores": [
+          129791.75,
+          142398.62,
+          142719.96,
+          145587.21,
+          142961.18
+        ],
+        "median": 142719.96,
+        "min": 129791.75,
+        "max": 145587.21,
+        "stddev": 5566.92,
+        "unit": "score"
+      },
+      "seq_read": {
+        "scores": [
+          18708.66,
+          20823.43,
+          20876.62,
+          21465.91,
+          21263.55
+        ],
+        "median": 20876.62,
+        "min": 18708.66,
+        "max": 21465.91,
+        "stddev": 988.93,
+        "unit": "MB/s"
+      },
+      "seq_write": {
+        "scores": [
+          18926.61,
+          20529.49,
+          20654.67,
+          20774.84,
+          20372.72
+        ],
+        "median": 20529.49,
+        "min": 18926.61,
+        "max": 20774.84,
+        "stddev": 675.83,
+        "unit": "MB/s"
+      },
+      "rand_read": {
+        "scores": [
+          1198761.00,
+          1348334.93,
+          1353981.80,
+          1373264.20,
+          1356368.00
+        ],
+        "median": 1353981.80,
+        "min": 1198761.00,
+        "max": 1373264.20,
+        "stddev": 64230.23,
+        "unit": "IOPS"
+      },
+      "rand_write": {
+        "scores": [
+          668559.80,
+          713337.20,
+          710636.60,
+          733587.20,
+          710902.80
+        ],
+        "median": 710902.80,
+        "min": 668559.80,
+        "max": 733587.20,
+        "stddev": 21224.17,
+        "unit": "IOPS"
+      }
+    },
+    "compile": {
+      "tool": "make",
+      "project": "redis",
+      "project_version": "7.2.7",
+      "iterations": 5,
+      "parallel_jobs": 6,
+      "scores": [
+        10.02,
+        10.09,
+        10.15,
+        10.96,
+        15.57
+      ],
+      "median": 10.15,
+      "min": 10.02,
+      "max": 15.57,
+      "stddev": 2.13,
+      "unit": "seconds"
+    },
+    "network": {
+      "tool": "curl",
+      "test_url": "https://speed.cloudflare.com/__down?bytes=26214400",
+      "download_bytes": 26214400,
+      "iterations": 5,
+      "composite": {
+        "scores": [
+          58.89,
+          57.35,
+          36.43,
+          56.85,
+          43.62
+        ],
+        "median": 56.85,
+        "min": 36.43,
+        "max": 58.89,
+        "stddev": 8.98,
+        "unit": "MB/s"
+      },
+      "download": {
+        "scores": [
+          58.89,
+          57.35,
+          36.43,
+          56.85,
+          43.62
+        ],
+        "median": 56.85,
+        "min": 36.43,
+        "max": 58.89,
+        "stddev": 8.98,
+        "unit": "MB/s"
+      },
+      "latency": {
+        "scores": [
+          68.03,
+          65.39,
+          76.57,
+          81.22,
+          96.07
+        ],
+        "median": 76.57,
+        "min": 65.39,
+        "max": 96.07,
+        "stddev": 10.92,
+        "unit": "ms"
+      }
+    }
+  },
+  "timing": {
+    "trigger_time": "2026-03-27T19:48:33.483Z",
+    "job_started_at": "2026-03-27T19:48:40Z",
+    "bench_started_at": "2026-03-27T19:48:58Z",
+    "queue_seconds": 7,
+    "setup_seconds": 18,
+    "total_seconds": 25
+  },
+  "system": {
+    "os": "macOS",
+    "os_version": "macOS 15.6",
+    "arch": "arm64",
+    "processor": "Apple M4 Pro (Virtual)",
+    "vcpus": 6,
+    "ram_mb": 28672,
+    "load_avg": "15.10 5.60 2.17"
+  }
+}
