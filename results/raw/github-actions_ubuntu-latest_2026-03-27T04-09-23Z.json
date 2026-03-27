@@ -1,0 +1,131 @@
+{
+  "provider": "github-actions",
+  "runner": "ubuntu-latest",
+  "timestamp": "2026-03-27T04:09:23Z",
+  "benchmarks": {
+    "cpu": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        1443.25,
+        1442.47,
+        1441.87,
+        1442.10,
+        1441.17
+      ],
+      "median": 1442.10,
+      "min": 1441.17,
+      "max": 1443.25,
+      "stddev": 0.69,
+      "unit": "events/sec"
+    },
+    "memory": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        6070.37,
+        6076.49,
+        6069.33,
+        6077.02,
+        6074.77
+      ],
+      "median": 6074.77,
+      "min": 6069.33,
+      "max": 6077.02,
+      "stddev": 3.16,
+      "unit": "MiB/sec"
+    },
+    "disk": {
+      "tool": "fio",
+      "iterations": 5,
+      "runtime_seconds": 5,
+      "composite": {
+        "scores": [
+          1912.61,
+          1903.47,
+          1921.13,
+          1918.69,
+          1930.92
+        ],
+        "median": 1918.69,
+        "min": 1903.47,
+        "max": 1930.92,
+        "stddev": 9.11,
+        "unit": "score"
+      },
+      "seq_read": {
+        "scores": [
+          416.80,
+          414.72,
+          413.92,
+          414.07,
+          415.93
+        ],
+        "median": 414.72,
+        "min": 413.92,
+        "max": 416.80,
+        "stddev": 1.11,
+        "unit": "MB/s"
+      },
+      "seq_write": {
+        "scores": [
+          415.65,
+          415.35,
+          416.03,
+          416.43,
+          415.60
+        ],
+        "median": 415.65,
+        "min": 415.35,
+        "max": 416.43,
+        "stddev": 0.38,
+        "unit": "MB/s"
+      },
+      "rand_read": {
+        "scores": [
+          6465.71,
+          6125.77,
+          6508.70,
+          6654.67,
+          6472.31
+        ],
+        "median": 6472.31,
+        "min": 6125.77,
+        "max": 6654.67,
+        "stddev": 173.84,
+        "unit": "IOPS"
+      },
+      "rand_write": {
+        "scores": [
+          11946.41,
+          12440.91,
+          12153.20,
+          11810.64,
+          12425.20
+        ],
+        "median": 12153.20,
+        "min": 11810.64,
+        "max": 12440.91,
+        "stddev": 251.73,
+        "unit": "IOPS"
+      }
+    }
+  },
+  "timing": {
+    "trigger_time": "2026-03-27T04:09:01Z",
+    "job_started_at": "2026-03-27T04:09:05Z",
+    "bench_started_at": "2026-03-27T04:09:23Z",
+    "queue_seconds": 4,
+    "setup_seconds": 18,
+    "total_seconds": 22
+  },
+  "system": {
+    "os": "Ubuntu",
+    "os_version": "Ubuntu 24.04.3 LTS",
+    "arch": "x86_64",
+    "processor": "AMD EPYC 7763 64-Core Processor",
+    "vcpus": 4,
+    "ram_mb": 15990,
+    "load_avg": "0.45, 0.12, 0.04"
+  }
+}
