@@ -593,8 +593,26 @@
                     return run.provider + " / " + run.runner;
                 }
 
-                /* Infer OS from runner name */
-                function inferOS(runner) {
+                /* Infer OS from system.os_version, falling back to runner name */
+                function inferOS(runner, system) {
+                    /* Prefer explicit os_version from system info */
+                    if (system && system.os_version) {
+                        var v = system.os_version.toLowerCase();
+                        if (
+                            v.indexOf("ubuntu") !== -1 ||
+                            v.indexOf("linux") !== -1 ||
+                            v.indexOf("debian") !== -1
+                        )
+                            return "Linux";
+                        if (v.indexOf("windows") !== -1) return "Windows";
+                        if (
+                            v.indexOf("macos") !== -1 ||
+                            v.indexOf("mac os") !== -1 ||
+                            v.indexOf("darwin") !== -1
+                        )
+                            return "macOS";
+                    }
+                    /* Fall back to runner name */
                     var r = runner.toLowerCase();
                     if (r.indexOf("ubuntu") !== -1 || r.indexOf("linux") !== -1)
                         return "Linux";
@@ -610,11 +628,11 @@
                 }
 
                 function tierKey(run) {
-                    return inferOS(run.runner);
+                    return inferOS(run.runner, run.system);
                 }
 
                 function tierLabel(run) {
-                    var os = inferOS(run.runner);
+                    var os = inferOS(run.runner, run.system);
                     var vcpus =
                         run.system && run.system.vcpus != null
                             ? run.system.vcpus
@@ -788,6 +806,28 @@
                             );
                         }
                     }
+                    /* Collect unique architectures */
+                    var archs = {};
+                    tier.runs.forEach(function (r) {
+                        if (r.system && r.system.arch)
+                            archs[r.system.arch] = true;
+                    });
+                    var archList = Object.keys(archs).sort();
+                    if (archList.length > 0) {
+                        metaParts.push(archList.join(", "));
+                    }
+
+                    /* Collect unique OS versions */
+                    var osVersions = {};
+                    tier.runs.forEach(function (r) {
+                        if (r.system && r.system.os_version)
+                            osVersions[r.system.os_version] = true;
+                    });
+                    var osVersionList = Object.keys(osVersions).sort();
+                    if (osVersionList.length > 0) {
+                        metaParts.push(osVersionList.join(", "));
+                    }
+
                     meta.textContent = metaParts.join(" \u00b7 ");
                     section.appendChild(meta);
 

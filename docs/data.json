@@ -1225,7 +1225,7 @@
           2023.62,
           2128.01,
           2095.59,
-          2076.60
+          2076.6
         ],
         "median": 2095.59,
         "min": 2023.62,
@@ -1248,7 +1248,7 @@
           "median": 36316.17,
           "min": 35332.69,
           "max": 36371.29,
-          "stddev": 395.30,
+          "stddev": 395.3,
           "unit": "score"
         },
         "seq_read": {
@@ -1282,28 +1282,28 @@
         "rand_read": {
           "scores": [
             350228.55,
-            360127.00,
+            360127.0,
             366788.24,
-            366965.20,
-            357072.20
+            366965.2,
+            357072.2
           ],
-          "median": 360127.00,
+          "median": 360127.0,
           "min": 350228.55,
-          "max": 366965.20,
+          "max": 366965.2,
           "stddev": 6298.96,
           "unit": "IOPS"
         },
         "rand_write": {
           "scores": [
-            165578.20,
-            157990.40,
-            161328.80,
-            158289.80,
+            165578.2,
+            157990.4,
+            161328.8,
+            158289.8,
             155206.56
           ],
-          "median": 158289.80,
+          "median": 158289.8,
           "min": 155206.56,
-          "max": 165578.20,
+          "max": 165578.2,
           "stddev": 3530.05,
           "unit": "IOPS"
         }
@@ -1318,6 +1318,8 @@
       "total_seconds": 94
     },
     "system": {
+      "os_version": "macOS 15",
+      "arch": "x86_64",
       "processor": "Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz",
       "vcpus": 4,
       "ram_mb": 14336,
@@ -1368,7 +1370,7 @@
         "composite": {
           "scores": [
             631.09,
-            632.60,
+            632.6,
             631.55,
             635.12,
             598.25
@@ -1396,15 +1398,15 @@
         "seq_write": {
           "scores": [
             166.83,
-            166.50,
+            166.5,
             157.78,
-            167.00,
+            167.0,
             144.06
           ],
-          "median": 166.50,
+          "median": 166.5,
           "min": 144.06,
-          "max": 167.00,
-          "stddev": 8.90,
+          "max": 167.0,
+          "stddev": 8.9,
           "unit": "MB/s"
         },
         "rand_read": {
@@ -1446,6 +1448,8 @@
       "total_seconds": 36
     },
     "system": {
+      "os_version": "Ubuntu 24.04 LTS",
+      "arch": "aarch64",
       "processor": "unknown",
       "vcpus": 4,
       "ram_mb": 15950,
@@ -1513,9 +1517,9 @@
             413.92,
             416.92,
             414.92,
-            415.10
+            415.1
           ],
-          "median": 415.10,
+          "median": 415.1,
           "min": 413.92,
           "max": 416.92,
           "stddev": 0.97,
@@ -1527,17 +1531,17 @@
             412.84,
             413.12,
             413.92,
-            416.10
+            416.1
           ],
           "median": 413.92,
           "min": 412.84,
-          "max": 416.10,
+          "max": 416.1,
           "stddev": 1.25,
           "unit": "MB/s"
         },
         "rand_read": {
           "scores": [
-            4024.20,
+            4024.2,
             4428.51,
             4136.37,
             4187.96,
@@ -1560,7 +1564,7 @@
           "median": 6263.55,
           "min": 5151.57,
           "max": 6764.45,
-          "stddev": 594.10,
+          "stddev": 594.1,
           "unit": "IOPS"
         }
       }
@@ -1574,6 +1578,8 @@
       "total_seconds": 23
     },
     "system": {
+      "os_version": "Ubuntu 24.04 LTS",
+      "arch": "x86_64",
       "processor": "AMD EPYC 7763 64-Core Processor",
       "vcpus": 4,
       "ram_mb": 15994,
@@ -1702,6 +1708,8 @@
       "total_seconds": 23
     },
     "system": {
+      "os_version": "Ubuntu 22.04 LTS",
+      "arch": "x86_64",
       "processor": "AMD EPYC 7763 64-Core Processor",
       "vcpus": 4,
       "ram_mb": 15991,
@@ -1718,14 +1726,14 @@
         "iterations": 5,
         "scores": [
           9150497.12,
-          9339033.50,
+          9339033.5,
           9246885.58,
           9139471.04,
           9207666.73
         ],
         "median": 9207666.73,
         "min": 9139471.04,
-        "max": 9339033.50,
+        "max": 9339033.5,
         "stddev": 72533.29,
         "unit": "events/sec"
       },
@@ -1735,13 +1743,13 @@
         "scores": [
           5697.12,
           5790.79,
-          6083.50,
+          6083.5,
           6063.38,
           6073.09
         ],
         "median": 6063.38,
         "min": 5697.12,
-        "max": 6083.50,
+        "max": 6083.5,
         "stddev": 164.18,
         "unit": "MiB/sec"
       },
@@ -1760,7 +1768,7 @@
           "median": 87238.78,
           "min": 80238.98,
           "max": 91711.86,
-          "stddev": 3703.00,
+          "stddev": 3703.0,
           "unit": "score"
         },
         "seq_read": {
@@ -1780,41 +1788,41 @@
         "seq_write": {
           "scores": [
             11527.69,
-            14476.10,
+            14476.1,
             14431.11,
             13208.56,
             13840.03
           ],
           "median": 13840.03,
           "min": 11527.69,
-          "max": 14476.10,
+          "max": 14476.1,
           "stddev": 1087.22,
           "unit": "MB/s"
         },
         "rand_read": {
           "scores": [
             787945.01,
-            759417.20,
-            807021.40,
-            873511.60,
-            833276.80
+            759417.2,
+            807021.4,
+            873511.6,
+            833276.8
           ],
-          "median": 807021.40,
-          "min": 759417.20,
-          "max": 873511.60,
+          "median": 807021.4,
+          "min": 759417.2,
+          "max": 873511.6,
           "stddev": 38998.68,
           "unit": "IOPS"
         },
         "rand_write": {
           "scores": [
             392703.06,
-            392072.40,
+            392072.4,
             408402.92,
-            395000.00,
-            396599.80
+            395000.0,
+            396599.8
           ],
-          "median": 395000.00,
-          "min": 392072.40,
+          "median": 395000.0,
+          "min": 392072.4,
           "max": 408402.92,
           "stddev": 5948.48,
           "unit": "IOPS"
@@ -1830,6 +1838,8 @@
       "total_seconds": 22
     },
     "system": {
+      "os_version": "macOS 14",
+      "arch": "aarch64",
       "processor": "Apple M1 (Virtual)",
       "vcpus": 3,
       "ram_mb": 7168,
@@ -1881,7 +1891,7 @@
           "scores": [
             1976.94,
             1970.24,
-            1960.50,
+            1960.5,
             1965.96,
             1941.94
           ],
@@ -1908,27 +1918,27 @@
         "seq_write": {
           "scores": [
             415.41,
-            413.00,
+            413.0,
             413.47,
             415.16,
             414.91
           ],
           "median": 414.91,
-          "min": 413.00,
+          "min": 413.0,
           "max": 415.41,
           "stddev": 0.97,
           "unit": "MB/s"
         },
         "rand_read": {
           "scores": [
-            7018.80,
+            7018.8,
             7061.79,
             7079.38,
             7077.98,
             7028.79
           ],
           "median": 7061.79,
-          "min": 7018.80,
+          "min": 7018.8,
           "max": 7079.38,
           "stddev": 25.11,
           "unit": "IOPS"
@@ -1958,6 +1968,8 @@
       "total_seconds": 21
     },
     "system": {
+      "os_version": "Ubuntu 24.04 LTS",
+      "arch": "x86_64",
       "processor": "AMD EPYC 7763 64-Core Processor",
       "vcpus": 4,
       "ram_mb": 15989,
@@ -1974,12 +1986,12 @@
         "iterations": 5,
         "scores": [
           1068.56,
-          1068.40,
+          1068.4,
           1067.81,
-          1068.10,
+          1068.1,
           1070.44
         ],
-        "median": 1068.40,
+        "median": 1068.4,
         "min": 1067.81,
         "max": 1070.44,
         "stddev": 0.93,
@@ -1990,12 +2002,12 @@
         "iterations": 5,
         "scores": [
           3631.46,
-          3799.70,
+          3799.7,
           3819.62,
           3525.14,
           3815.19
         ],
-        "median": 3799.70,
+        "median": 3799.7,
         "min": 3525.14,
         "max": 3819.62,
         "stddev": 119.27,
@@ -2011,6 +2023,8 @@
       "total_seconds": 21
     },
     "system": {
+      "os_version": "Ubuntu 22.04 LTS",
+      "arch": "aarch64",
       "processor": "unknown",
       "vcpus": 32,
       "ram_mb": 16384,
@@ -2044,14 +2058,14 @@
         "scores": [
           5813.11,
           5798.72,
-          5813.00,
+          5813.0,
           5806.96,
           5678.61
         ],
         "median": 5806.96,
         "min": 5678.61,
         "max": 5813.11,
-        "stddev": 52.00,
+        "stddev": 52.0,
         "unit": "MiB/sec"
       },
       "disk": {
@@ -2091,40 +2105,40 @@
             9618.28,
             10375.92,
             10404.72,
-            10476.70,
+            10476.7,
             10292.34
           ],
           "median": 10375.92,
           "min": 9618.28,
-          "max": 10476.70,
+          "max": 10476.7,
           "stddev": 313.27,
           "unit": "MB/s"
         },
         "rand_read": {
           "scores": [
-            852574.80,
-            902919.40,
-            895616.40,
-            884934.00,
-            899292.80
+            852574.8,
+            902919.4,
+            895616.4,
+            884934.0,
+            899292.8
           ],
-          "median": 895616.40,
-          "min": 852574.80,
-          "max": 902919.40,
+          "median": 895616.4,
+          "min": 852574.8,
+          "max": 902919.4,
           "stddev": 18265.39,
           "unit": "IOPS"
         },
         "rand_write": {
           "scores": [
-            438146.20,
-            426191.80,
-            444120.80,
-            423197.80,
-            442968.00
+            438146.2,
+            426191.8,
+            444120.8,
+            423197.8,
+            442968.0
           ],
-          "median": 438146.20,
-          "min": 423197.80,
-          "max": 444120.80,
+          "median": 438146.2,
+          "min": 423197.8,
+          "max": 444120.8,
           "stddev": 8642.05,
           "unit": "IOPS"
         }
@@ -2139,6 +2153,8 @@
       "total_seconds": 18
     },
     "system": {
+      "os_version": "macOS 14",
+      "arch": "aarch64",
       "processor": "Apple M1 (Virtual)",
       "vcpus": 3,
       "ram_mb": 7168,
@@ -2192,6 +2208,8 @@
       "total_seconds": 14
     },
     "system": {
+      "os_version": "Ubuntu 22.04 LTS",
+      "arch": "x86_64",
       "processor": "Intel(R) Xeon(R) Platinum 8223CL CPU @ 3.00GHz",
       "vcpus": 36,
       "ram_mb": 4096,
@@ -2208,13 +2226,13 @@
         "iterations": 5,
         "scores": [
           441.61,
-          431.50,
+          431.5,
           436.96,
           442.72,
           449.65
         ],
         "median": 441.61,
-        "min": 431.50,
+        "min": 431.5,
         "max": 449.65,
         "stddev": 6.06,
         "unit": "events/sec"
@@ -2223,14 +2241,14 @@
         "tool": "sysbench",
         "iterations": 5,
         "scores": [
-          5787.10,
+          5787.1,
           5787.89,
           5771.76,
-          5768.60,
+          5768.6,
           5774.44
         ],
         "median": 5774.44,
-        "min": 5768.60,
+        "min": 5768.6,
         "max": 5787.89,
         "stddev": 8.01,
         "unit": "MiB/sec"
@@ -2245,6 +2263,8 @@
       "total_seconds": 13
     },
     "system": {
+      "os_version": "Ubuntu 22.04 LTS",
+      "arch": "x86_64",
       "processor": "Intel(R) Xeon(R) Platinum 8223CL CPU @ 3.00GHz",
       "vcpus": 36,
       "ram_mb": 16384,
@@ -2261,9 +2281,9 @@
         "iterations": 5,
         "scores": [
           443.13,
-          445.70,
+          445.7,
           448.46,
-          448.20,
+          448.2,
           446.99
         ],
         "median": 446.99,
@@ -2276,13 +2296,13 @@
         "tool": "sysbench",
         "iterations": 5,
         "scores": [
-          5777.50,
+          5777.5,
           5710.12,
           5781.61,
           5784.97,
           5671.44
         ],
-        "median": 5777.50,
+        "median": 5777.5,
         "min": 5671.44,
         "max": 5784.97,
         "stddev": 46.09,
@@ -2298,6 +2318,8 @@
       "total_seconds": 13
     },
     "system": {
+      "os_version": "Ubuntu 22.04 LTS",
+      "arch": "x86_64",
       "processor": "Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz",
       "vcpus": 36,
       "ram_mb": 8192,
@@ -2351,6 +2373,8 @@
       "total_seconds": 13
     },
     "system": {
+      "os_version": "Ubuntu 22.04 LTS",
+      "arch": "aarch64",
       "processor": "unknown",
       "vcpus": 32,
       "ram_mb": 8192,
@@ -2384,13 +2408,13 @@
         "scores": [
           5546.25,
           5666.01,
-          5735.40,
+          5735.4,
           5484.02,
           5573.25
         ],
         "median": 5573.25,
         "min": 5484.02,
-        "max": 5735.40,
+        "max": 5735.4,
         "stddev": 89.15,
         "unit": "MiB/sec"
       }
@@ -2404,6 +2428,8 @@
       "total_seconds": 45
     },
     "system": {
+      "os_version": "Ubuntu 22.04 LTS",
+      "arch": "x86_64",
       "processor": "Intel(R) Xeon(R) Platinum 8223CL CPU @ 3.00GHz",
       "vcpus": 36,
       "ram_mb": 8192,
@@ -2435,7 +2461,7 @@
         "tool": "sysbench",
         "iterations": 5,
         "scores": [
-          4999.70,
+          4999.7,
           4580.21,
           5433.37,
           5544.32,
@@ -2457,6 +2483,8 @@
       "total_seconds": 34
     },
     "system": {
+      "os_version": "Ubuntu 22.04 LTS",
+      "arch": "x86_64",
       "processor": "Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz",
       "vcpus": 36,
       "ram_mb": 4096,
@@ -2510,6 +2538,8 @@
       "total_seconds": 28
     },
     "system": {
+      "os_version": "Ubuntu 24.04 LTS",
+      "arch": "x86_64",
       "processor": "AMD EPYC 7763 64-Core Processor",
       "vcpus": 4,
       "ram_mb": 15994,
@@ -2542,13 +2572,13 @@
         "iterations": 5,
         "scores": [
           5369.47,
-          5131.20,
-          5091.20,
+          5131.2,
+          5091.2,
           5482.56,
           5419.26
         ],
         "median": 5369.47,
-        "min": 5091.20,
+        "min": 5091.2,
         "max": 5482.56,
         "stddev": 157.77,
         "unit": "MiB/sec"
@@ -2563,6 +2593,8 @@
       "total_seconds": 25
     },
     "system": {
+      "os_version": "macOS 14",
+      "arch": "aarch64",
       "processor": "Apple M1 (Virtual)",
       "vcpus": 3,
       "ram_mb": 7168,
@@ -2616,6 +2648,8 @@
       "total_seconds": 23
     },
     "system": {
+      "os_version": "Ubuntu 22.04 LTS",
+      "arch": "x86_64",
       "processor": "Intel(R) Xeon(R) Platinum 8370C CPU @ 2.80GHz",
       "vcpus": 4,
       "ram_mb": 15994,
@@ -2669,6 +2703,8 @@
       "total_seconds": 21
     },
     "system": {
+      "os_version": "macOS 14",
+      "arch": "aarch64",
       "processor": "Apple M1 (Virtual)",
       "vcpus": 3,
       "ram_mb": 7168,
@@ -2702,13 +2738,13 @@
         "scores": [
           7049.77,
           7059.58,
-          7060.30,
+          7060.3,
           7057.12,
           7059.67
         ],
         "median": 7059.58,
         "min": 7049.77,
-        "max": 7060.30,
+        "max": 7060.3,
         "stddev": 3.91,
         "unit": "MiB/sec"
       }
@@ -2722,6 +2758,8 @@
       "total_seconds": 19
     },
     "system": {
+      "os_version": "Ubuntu 24.04 LTS",
+      "arch": "x86_64",
       "processor": "Intel(R) Xeon(R) Platinum 8370C CPU @ 2.80GHz",
       "vcpus": 4,
       "ram_mb": 15989,
@@ -2737,14 +2775,14 @@
         "tool": "sysbench",
         "iterations": 5,
         "scores": [
-          1067.40,
+          1067.4,
           1068.88,
           1069.93,
-          1068.90,
+          1068.9,
           1069.18
         ],
-        "median": 1068.90,
-        "min": 1067.40,
+        "median": 1068.9,
+        "min": 1067.4,
         "max": 1069.93,
         "stddev": 0.82,
         "unit": "events/sec"
@@ -2775,6 +2813,8 @@
       "total_seconds": 16
     },
     "system": {
+      "os_version": "Ubuntu 22.04 LTS",
+      "arch": "aarch64",
       "processor": "unknown",
       "vcpus": 32,
       "ram_mb": 16384,
@@ -2807,13 +2847,13 @@
         "iterations": 5,
         "scores": [
           5646.25,
-          5590.10,
-          5677.40,
+          5590.1,
+          5677.4,
           5751.81,
           5730.68
         ],
-        "median": 5677.40,
-        "min": 5590.10,
+        "median": 5677.4,
+        "min": 5590.1,
         "max": 5751.81,
         "stddev": 58.22,
         "unit": "MiB/sec"
@@ -2828,6 +2868,8 @@
       "total_seconds": 15
     },
     "system": {
+      "os_version": "Ubuntu 22.04 LTS",
+      "arch": "x86_64",
       "processor": "Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz",
       "vcpus": 36,
       "ram_mb": 16384,
@@ -2847,9 +2889,9 @@
           1068.13,
           1068.29,
           1070.71,
-          1068.60
+          1068.6
         ],
-        "median": 1068.60,
+        "median": 1068.6,
         "min": 1068.13,
         "max": 1070.71,
         "stddev": 0.94,
@@ -2881,6 +2923,8 @@
       "total_seconds": 15
     },
     "system": {
+      "os_version": "Ubuntu 22.04 LTS",
+      "arch": "aarch64",
       "processor": "unknown",
       "vcpus": 32,
       "ram_mb": 8192,
@@ -2896,13 +2940,13 @@
         "tool": "sysbench",
         "iterations": 5,
         "scores": [
-          415.40,
+          415.4,
           433.05,
           445.93,
           408.62,
           374.18
         ],
-        "median": 415.40,
+        "median": 415.4,
         "min": 374.18,
         "max": 445.93,
         "stddev": 24.45,
@@ -2934,6 +2978,8 @@
       "total_seconds": 18
     },
     "system": {
+      "os_version": "Ubuntu 22.04 LTS",
+      "arch": "x86_64",
       "processor": "Intel(R) Xeon(R) Platinum 8223CL CPU @ 3.00GHz",
       "vcpus": 36,
       "ram_mb": 4096,
@@ -2965,13 +3011,13 @@
         "tool": "sysbench",
         "iterations": 5,
         "scores": [
-          5352.00,
+          5352.0,
           5462.51,
           5473.15,
           5030.43,
           4305.33
         ],
-        "median": 5352.00,
+        "median": 5352.0,
         "min": 4305.33,
         "max": 5473.15,
         "stddev": 439.88,
@@ -2987,6 +3033,8 @@
       "total_seconds": 17
     },
     "system": {
+      "os_version": "Ubuntu 22.04 LTS",
+      "arch": "x86_64",
       "processor": "Intel(R) Xeon(R) Platinum 8223CL CPU @ 3.00GHz",
       "vcpus": 36,
       "ram_mb": 8192,
@@ -3040,6 +3088,8 @@
       "total_seconds": 14
     },
     "system": {
+      "os_version": "Ubuntu 22.04 LTS",
+      "arch": "x86_64",
       "processor": "Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz",
       "vcpus": 36,
       "ram_mb": 16384,
@@ -3093,6 +3143,8 @@
       "total_seconds": 14
     },
     "system": {
+      "os_version": "Ubuntu 22.04 LTS",
+      "arch": "aarch64",
       "processor": "unknown",
       "vcpus": 32,
       "ram_mb": 8192,
@@ -3128,11 +3180,11 @@
           3796.38,
           3790.36,
           3783.21,
-          3798.90
+          3798.9
         ],
         "median": 3790.36,
         "min": 3783.21,
-        "max": 3798.90,
+        "max": 3798.9,
         "stddev": 5.86,
         "unit": "MiB/sec"
       }
@@ -3146,6 +3198,8 @@
       "total_seconds": 13
     },
     "system": {
+      "os_version": "Ubuntu 22.04 LTS",
+      "arch": "aarch64",
       "processor": "unknown",
       "vcpus": 32,
       "ram_mb": 16384,
@@ -3178,12 +3232,12 @@
         "iterations": 5,
         "scores": [
           5742.43,
-          5654.80,
-          5499.50,
+          5654.8,
+          5499.5,
           4458.21,
           4593.32
         ],
-        "median": 5499.50,
+        "median": 5499.5,
         "min": 4458.21,
         "max": 5742.43,
         "stddev": 549.28,
@@ -3191,6 +3245,8 @@
       }
     },
     "system": {
+      "os_version": "Ubuntu 22.04 LTS",
+      "arch": "x86_64",
       "processor": "Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz",
       "vcpus": 36,
       "ram_mb": 4096,
@@ -3208,7 +3264,7 @@
         "scores": [
           439.42,
           442.78,
-          424.40,
+          424.4,
           441.29,
           413.51
         ],
@@ -3236,6 +3292,8 @@
       }
     },
     "system": {
+      "os_version": "Ubuntu 22.04 LTS",
+      "arch": "x86_64",
       "processor": "Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz",
       "vcpus": 36,
       "ram_mb": 8192,
@@ -3270,10 +3328,10 @@
           3799.66,
           3788.41,
           3796.09,
-          3797.00,
+          3797.0,
           3799.64
         ],
-        "median": 3797.00,
+        "median": 3797.0,
         "min": 3788.41,
         "max": 3799.66,
         "stddev": 4.13,
@@ -3281,6 +3339,8 @@
       }
     },
     "system": {
+      "os_version": "Ubuntu 22.04 LTS",
+      "arch": "aarch64",
       "processor": "unknown",
       "vcpus": 32,
       "ram_mb": 16384,
@@ -3296,13 +3356,13 @@
         "tool": "sysbench",
         "iterations": 5,
         "scores": [
-          1068.00,
+          1068.0,
           1068.58,
           1068.93,
           1067.42,
           1067.25
         ],
-        "median": 1068.00,
+        "median": 1068.0,
         "min": 1067.25,
         "max": 1068.93,
         "stddev": 0.65,
@@ -3321,11 +3381,13 @@
         "median": 3784.18,
         "min": 3773.24,
         "max": 3796.31,
-        "stddev": 8.20,
+        "stddev": 8.2,
         "unit": "MiB/sec"
       }
     },
     "system": {
+      "os_version": "Ubuntu 22.04 LTS",
+      "arch": "aarch64",
       "processor": "unknown",
       "vcpus": 32,
       "ram_mb": 8192,
@@ -3341,15 +3403,15 @@
         "tool": "sysbench",
         "iterations": 5,
         "scores": [
-          441.20,
-          449.90,
+          441.2,
+          449.9,
           438.88,
           410.38,
           412.82
         ],
         "median": 438.88,
         "min": 410.38,
-        "max": 449.90,
+        "max": 449.9,
         "stddev": 15.99,
         "unit": "events/sec"
       },
@@ -3366,11 +3428,13 @@
         "median": 5724.93,
         "min": 5516.75,
         "max": 5750.76,
-        "stddev": 87.80,
+        "stddev": 87.8,
         "unit": "MiB/sec"
       }
     },
     "system": {
+      "os_version": "Ubuntu 22.04 LTS",
+      "arch": "x86_64",
       "processor": "Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz",
       "vcpus": 36,
       "ram_mb": 16384,
