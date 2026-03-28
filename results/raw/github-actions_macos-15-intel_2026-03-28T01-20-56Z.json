@@ -1,0 +1,198 @@
+{
+  "provider": "github-actions",
+  "runner": "macos-15-intel",
+  "timestamp": "2026-03-28T01:20:56Z",
+  "benchmarks": {
+    "cpu": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        2343197.35,
+        2401188.48,
+        2303509.81,
+        2278824.19,
+        2108538.34
+      ],
+      "median": 2303509.81,
+      "min": 2108538.34,
+      "max": 2401188.48,
+      "stddev": 98371.87,
+      "unit": "events/sec"
+    },
+    "memory": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        1712.91,
+        1570.26,
+        1624.40,
+        1593.68,
+        1740.18
+      ],
+      "median": 1624.40,
+      "min": 1570.26,
+      "max": 1740.18,
+      "stddev": 66.73,
+      "unit": "MiB/sec"
+    },
+    "disk": {
+      "tool": "fio",
+      "iterations": 5,
+      "runtime_seconds": 5,
+      "composite": {
+        "scores": [
+          33217.78,
+          38620.70,
+          32681.05,
+          37443.82,
+          42577.54
+        ],
+        "median": 37443.82,
+        "min": 32681.05,
+        "max": 42577.54,
+        "stddev": 3656.47,
+        "unit": "score"
+      },
+      "seq_read": {
+        "scores": [
+          6494.70,
+          6792.64,
+          5100.98,
+          7149.57,
+          7016.80
+        ],
+        "median": 6792.64,
+        "min": 5100.98,
+        "max": 7149.57,
+        "stddev": 739.10,
+        "unit": "MB/s"
+      },
+      "seq_write": {
+        "scores": [
+          4845.83,
+          7411.72,
+          4018.80,
+          7111.18,
+          7039.39
+        ],
+        "median": 7039.39,
+        "min": 4018.80,
+        "max": 7411.72,
+        "stddev": 1380.49,
+        "unit": "MB/s"
+      },
+      "rand_read": {
+        "scores": [
+          275695.86,
+          285438.00,
+          307866.80,
+          271933.41,
+          434008.40
+        ],
+        "median": 285438.00,
+        "min": 271933.41,
+        "max": 434008.40,
+        "stddev": 60806.81,
+        "unit": "IOPS"
+      },
+      "rand_write": {
+        "scores": [
+          140321.80,
+          154814.40,
+          180747.05,
+          142179.36,
+          153302.80
+        ],
+        "median": 153302.80,
+        "min": 140321.80,
+        "max": 180747.05,
+        "stddev": 14443.00,
+        "unit": "IOPS"
+      }
+    },
+    "compile": {
+      "tool": "make",
+      "project": "redis",
+      "project_version": "7.2.7",
+      "iterations": 5,
+      "parallel_jobs": 4,
+      "scores": [
+        66.43,
+        48.76,
+        54.62,
+        46.83,
+        47.77
+      ],
+      "median": 48.76,
+      "min": 46.83,
+      "max": 66.43,
+      "stddev": 7.30,
+      "unit": "seconds"
+    },
+    "network": {
+      "tool": "curl",
+      "test_url": "https://speed.cloudflare.com/__down?bytes=26214400",
+      "download_bytes": 26214400,
+      "iterations": 5,
+      "composite": {
+        "scores": [
+          58.58,
+          99.42,
+          79.42,
+          135.85,
+          135.19
+        ],
+        "median": 99.42,
+        "min": 58.58,
+        "max": 135.85,
+        "stddev": 30.49,
+        "unit": "MB/s"
+      },
+      "download": {
+        "scores": [
+          58.58,
+          99.42,
+          79.42,
+          135.85,
+          135.19
+        ],
+        "median": 99.42,
+        "min": 58.58,
+        "max": 135.85,
+        "stddev": 30.49,
+        "unit": "MB/s"
+      },
+      "latency": {
+        "scores": [
+          86.97,
+          98.57,
+          99.28,
+          110.16,
+          76.82
+        ],
+        "median": 98.57,
+        "min": 76.82,
+        "max": 110.16,
+        "stddev": 11.44,
+        "unit": "ms"
+      }
+    }
+  },
+  "timing": {
+    "trigger_time": "2026-03-28T01:20:04Z",
+    "job_started_at": "2026-03-28T01:20:11Z",
+    "bench_started_at": "2026-03-28T01:20:55Z",
+    "queue_seconds": 7,
+    "setup_seconds": 44,
+    "total_seconds": 51
+  },
+  "system": {
+    "os": "macOS",
+    "os_version": "macOS 15.7.5",
+    "arch": "x86_64",
+    "processor": "Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz",
+    "vcpus": 4,
+    "ram_mb": 14336,
+    "load_avg": "25.35 32.78 16.13"
+  }
+}
