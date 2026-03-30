@@ -38,6 +38,10 @@
                 --row-hover: rgba(67, 97, 238, 0.12);
             }
 
+            html {
+                scroll-behavior: smooth;
+            }
+
             body {
                 font-family:
                     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -83,6 +87,62 @@
                 border-radius: 20px;
                 font-size: 0.82rem;
                 color: var(--text-secondary);
+            }
+
+            /* Navigation */
+            .nav-bar {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                padding: 10px 16px;
+                margin-bottom: 28px;
+                background: rgba(26, 26, 46, 0.92);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border: 1px solid var(--border-color);
+                border-radius: 12px;
+                overflow-x: auto;
+                scrollbar-width: none;
+            }
+
+            .nav-bar::-webkit-scrollbar {
+                display: none;
+            }
+
+            .nav-bar a {
+                flex-shrink: 0;
+                padding: 6px 14px;
+                border-radius: 8px;
+                font-size: 0.82rem;
+                font-weight: 500;
+                color: var(--text-secondary);
+                text-decoration: none;
+                white-space: nowrap;
+                transition:
+                    background 0.2s,
+                    color 0.2s;
+            }
+
+            .nav-bar a:hover {
+                background: rgba(67, 97, 238, 0.12);
+                color: var(--text-primary);
+            }
+
+            .nav-bar a.active {
+                background: var(--accent);
+                color: #fff;
+            }
+
+            #about-section,
+            #tier-container,
+            #all-scores-wrapper,
+            #comparison-wrapper,
+            #timing-stats-container,
+            #timeline-section {
+                scroll-margin-top: 60px;
             }
 
             /* Cards */
@@ -511,6 +571,11 @@
                 tbody td {
                     padding: 8px 10px;
                 }
+
+                .nav-bar a {
+                    padding: 5px 10px;
+                    font-size: 0.78rem;
+                }
             }
 
             @media (max-width: 600px) {
@@ -525,6 +590,11 @@
 
                 .charts-grid {
                     gap: 16px;
+                }
+
+                .nav-bar {
+                    padding: 8px 10px;
+                    gap: 2px;
                 }
             }
         </style>
@@ -552,6 +622,34 @@
             </div>
 
             <main id="dashboard" style="display: none">
+                <!-- Section navigation -->
+                <nav class="nav-bar" id="nav-bar">
+                    <a href="#about-section" data-nav="about-section">About</a>
+                    <a href="#tier-container" data-nav="tier-container"
+                        >Benchmarks</a
+                    >
+                    <a
+                        href="#all-scores-wrapper"
+                        data-nav="all-scores-wrapper"
+                        class="nav-conditional"
+                        >Warm-up Scores</a
+                    >
+                    <a
+                        href="#comparison-wrapper"
+                        data-nav="comparison-wrapper"
+                        class="nav-conditional"
+                        >GHA vs CircleCI</a
+                    >
+                    <a
+                        href="#timing-stats-container"
+                        data-nav="timing-stats-container"
+                        >Timing</a
+                    >
+                    <a href="#timeline-section" data-nav="timeline-section"
+                        >Timeline</a
+                    >
+                </nav>
+
                 <!-- Filters -->
                 <div class="filter-bar" id="filter-bar" style="display: none">
                     <span class="filter-label">Filters:</span>
@@ -563,7 +661,7 @@
                 </div>
 
                 <!-- About the benchmarks -->
-                <section class="card about-card">
+                <section class="card about-card" id="about-section">
                     <h2>About the Benchmarks</h2>
                     <p class="section-desc">
                         This dashboard compares CI runner performance using
@@ -2394,6 +2492,19 @@
                             countEl.textContent =
                                 "Showing all " + allRuns.length + " runs";
                         }
+
+                        /* Update nav conditional links */
+                        var navLinks =
+                            document.querySelectorAll(".nav-conditional");
+                        for (var ni = 0; ni < navLinks.length; ni++) {
+                            var target = document.getElementById(
+                                navLinks[ni].getAttribute("data-nav"),
+                            );
+                            navLinks[ni].style.display =
+                                target && target.style.display !== "none"
+                                    ? ""
+                                    : "none";
+                        }
                     }
 
                     document.getElementById("loading").style.display = "none";
@@ -2413,6 +2524,50 @@
 
                     /* Initial render */
                     renderDashboard(false);
+
+                    /* Scroll-spy: highlight active nav link */
+                    var navSections = [
+                        "about-section",
+                        "tier-container",
+                        "all-scores-wrapper",
+                        "comparison-wrapper",
+                        "timing-stats-container",
+                        "timeline-section",
+                    ];
+                    function updateActiveNav() {
+                        var links = document.querySelectorAll(
+                            "#nav-bar a[data-nav]",
+                        );
+                        var scrollY = window.scrollY || window.pageYOffset;
+                        var offset = 80;
+                        var activeId = navSections[0];
+                        for (var si = 0; si < navSections.length; si++) {
+                            var sec = document.getElementById(navSections[si]);
+                            if (
+                                sec &&
+                                sec.style.display !== "none" &&
+                                sec.getBoundingClientRect().top +
+                                    scrollY -
+                                    offset <=
+                                    scrollY
+                            ) {
+                                activeId = navSections[si];
+                            }
+                        }
+                        for (var li = 0; li < links.length; li++) {
+                            if (
+                                links[li].getAttribute("data-nav") === activeId
+                            ) {
+                                links[li].classList.add("active");
+                            } else {
+                                links[li].classList.remove("active");
+                            }
+                        }
+                    }
+                    window.addEventListener("scroll", updateActiveNav, {
+                        passive: true,
+                    });
+                    updateActiveNav();
                 }
 
                 /* Boot */
