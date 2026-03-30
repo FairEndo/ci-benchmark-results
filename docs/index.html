@@ -429,6 +429,48 @@
                 color: #4361ee;
             }
 
+            /* Filter bar */
+            .filter-bar {
+                display: flex;
+                align-items: center;
+                gap: 18px;
+                flex-wrap: wrap;
+                margin-bottom: 24px;
+                padding: 14px 20px;
+                background: var(--card-bg);
+                border: 1px solid var(--border-color);
+                border-radius: 14px;
+                font-size: 0.92rem;
+            }
+
+            .filter-bar label {
+                display: inline-flex;
+                align-items: center;
+                gap: 7px;
+                cursor: pointer;
+                color: var(--text-primary);
+                user-select: none;
+            }
+
+            .filter-bar label input[type="checkbox"] {
+                accent-color: var(--accent);
+                width: 16px;
+                height: 16px;
+                cursor: pointer;
+            }
+
+            .filter-bar .filter-label {
+                font-weight: 600;
+                color: var(--text-heading);
+                margin-right: 4px;
+            }
+
+            .filter-bar .filter-count {
+                font-size: 0.82rem;
+                color: var(--text-secondary);
+                margin-left: auto;
+            }
+
             /* Footer */
             .footer {
                 text-align: center;
@@ -506,6 +548,16 @@
             </div>
 
             <main id="dashboard" style="display: none">
+                <!-- Filters -->
+                <div class="filter-bar" id="filter-bar" style="display: none">
+                    <span class="filter-label">Filters:</span>
+                    <label>
+                        <input type="checkbox" id="filter-warmup" />
+                        Hide warm-up runs
+                    </label>
+                    <span class="filter-count" id="filter-count"></span>
+                </div>
+
                 <!-- About the benchmarks -->
                 <section class="card about-card">
                     <h2>About the Benchmarks</h2>
@@ -651,6 +703,18 @@
 
                 function comboKey(run) {
                     return run.provider + "|" + run.runner;
+                }
+
+                function hasWarmupIteration(run) {
+                    if (
+                        !run.benchmarks ||
+                        !run.benchmarks.cpu ||
+                        !run.benchmarks.cpu.scores ||
+                        run.benchmarks.cpu.scores.length < 2
+                    )
+                        return false;
+                    var st = computeStats(run.benchmarks.cpu.scores);
+                    return st.median !== run.benchmarks.cpu.median;
                 }
 
                 function fmtNum(n, decimals) {
@@ -2177,60 +2241,109 @@
                         return;
                     }
 
-                    var latest = dedup(allRuns);
-                    var tiers = groupByTier(latest);
+                    /* Check if any run has warm-up data */
+                    var warmupCount = allRuns.filter(hasWarmupIteration).length;
+
+                    function renderDashboard(hideWarmup) {
+                        var filteredRuns = hideWarmup
+                            ? allRuns.filter(function (r) {
+                                  return !hasWarmupIteration(r);
+                              })
+                            : allRuns;
+
+                        var latest = dedup(filteredRuns);
+                        var tiers = groupByTier(latest);
+
+                        /* Clear dynamic containers */
+                        document.getElementById("tier-container").innerHTML =
+                            "";
+                        document.getElementById(
+                            "tier-container-all",
+                        ).innerHTML = "";
+                        document.getElementById(
+                            "timing-stats-container",
+                        ).innerHTML = "";
+
+                        /* Destroy existing timeline chart if present */
+                        var tlCanvas =
+                            document.getElementById("timeline-chart");
+                        var existingChart = Chart.getChart(tlCanvas);
+                        if (existingChart) existingChart.destroy();
+
+                        renderHeader(filteredRuns);
+
+                        tiers.forEach(function (tier, i) {
+                            renderTierSection(tier, i);
+                        });
+
+                        /* "All Scores" section — includes warm-up iteration */
+                        var hasWarmup = latest.some(hasWarmupIteration);
+                        if (hasWarmup) {
+                            document.getElementById(
+                                "all-scores-wrapper",
+                            ).style.display = "";
+                            var allTiers = tiers.map(function (tier) {
+                                return {
+                                    key: tier.key,
+                                    os: tier.os,
+                                    vcpuMin: tier.vcpuMin,
+                                    vcpuMax: tier.vcpuMax,
+                                    runs: tier.runs.map(recomputeRunAllScores),
+                                    ramMin: tier.ramMin,
+                                    ramMax: tier.ramMax,
+                                };
+                            });
+                            allTiers.forEach(function (tier, i) {
+                                renderTierSection(tier, i, {
+                                    containerId: "tier-container-all",
+                                    prefix: "all-",
+                                    showHardware: false,
+                                });
+                            });
+                        } else {
+                            document.getElementById(
+                                "all-scores-wrapper",
+                            ).style.display = "none";
+                        }
+
+                        renderTimingStats(filteredRuns);
+                        renderTimeline(filteredRuns);
+                        renderFooter(filteredRuns, tiers.length);
+
+                        /* Update filter count */
+                        var countEl = document.getElementById("filter-count");
+                        if (hideWarmup) {
+                            countEl.textContent =
+                                "Showing " +
+                                filteredRuns.length +
+                                " of " +
+                                allRuns.length +
+                                " runs (" +
+                                (allRuns.length - filteredRuns.length) +
+                                " warm-up runs hidden)";
+                        } else {
+                            countEl.textContent =
+                                "Showing all " + allRuns.length + " runs";
+                        }
+                    }
 
                     document.getElementById("loading").style.display = "none";
                     document.getElementById("dashboard").style.display = "";
 
-                    renderHeader(allRuns);
-
-                    tiers.forEach(function (tier, i) {
-                        renderTierSection(tier, i);
-                    });
-
-                    /* "All Scores" section — includes warm-up iteration.
-                       Detect by checking whether recomputing stats from the
-                       full scores array produces a different median than the
-                       stored (warm-up-dropped) one. */
-                    var hasWarmup = latest.some(function (r) {
-                        if (
-                            !r.benchmarks ||
-                            !r.benchmarks.cpu ||
-                            !r.benchmarks.cpu.scores ||
-                            r.benchmarks.cpu.scores.length < 2
-                        )
-                            return false;
-                        var st = computeStats(r.benchmarks.cpu.scores);
-                        return st.median !== r.benchmarks.cpu.median;
-                    });
-                    if (hasWarmup) {
-                        document.getElementById(
-                            "all-scores-wrapper",
-                        ).style.display = "";
-                        var allTiers = tiers.map(function (tier) {
-                            return {
-                                key: tier.key,
-                                os: tier.os,
-                                vcpuMin: tier.vcpuMin,
-                                vcpuMax: tier.vcpuMax,
-                                runs: tier.runs.map(recomputeRunAllScores),
-                                ramMin: tier.ramMin,
-                                ramMax: tier.ramMax,
-                            };
-                        });
-                        allTiers.forEach(function (tier, i) {
-                            renderTierSection(tier, i, {
-                                containerId: "tier-container-all",
-                                prefix: "all-",
-                                showHardware: false,
-                            });
-                        });
+                    /* Show filter bar if warm-up runs exist */
+                    if (warmupCount > 0) {
+                        document.getElementById("filter-bar").style.display =
+                            "";
                     }
 
-                    renderTimingStats(allRuns);
-                    renderTimeline(allRuns);
-                    renderFooter(allRuns, tiers.length);
+                    /* Wire up checkbox */
+                    var checkbox = document.getElementById("filter-warmup");
+                    checkbox.addEventListener("change", function () {
+                        renderDashboard(checkbox.checked);
+                    });
+
+                    /* Initial render */
+                    renderDashboard(false);
                 }
 
                 /* Boot */
