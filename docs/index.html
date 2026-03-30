@@ -587,6 +587,27 @@
                 <!-- Tier sections are rendered dynamically here -->
                 <div id="tier-container"></div>
 
+                <!-- All-scores tier sections (including warm-up) -->
+                <div id="all-scores-wrapper" style="display: none">
+                    <section class="card about-card">
+                        <h2>
+                            &#9888; Full Run Performance (Including Warm-up)
+                        </h2>
+                        <p class="section-desc">
+                            The same benchmarks as above, but with statistics
+                            computed over
+                            <strong
+                                >all iterations including the first warm-up
+                                run</strong
+                            >. The warm-up iteration typically runs with cold
+                            caches and may show lower performance. Compare with
+                            the primary results above to see how much the
+                            warm-up affects each runner.
+                        </p>
+                    </section>
+                    <div id="tier-container-all"></div>
+                </div>
+
                 <!-- Run Timing Stats table -->
                 <div id="timing-stats-container"></div>
 
@@ -663,7 +684,154 @@
                     return run.provider + " / " + run.runner;
                 }
 
-                /* Infer OS from system.os_version, falling back to runner name */
+                /* ---- All-scores helpers (warm-up included) ---- */
+
+                function computeStats(scores) {
+                    if (!scores || scores.length === 0) return null;
+                    var sorted = scores.slice().sort(function (a, b) {
+                        return a - b;
+                    });
+                    var len = sorted.length;
+                    var median;
+                    if (len % 2 === 1) {
+                        median = sorted[Math.floor(len / 2)];
+                    } else {
+                        median = (sorted[len / 2 - 1] + sorted[len / 2]) / 2;
+                    }
+                    var min = sorted[0];
+                    var max = sorted[len - 1];
+                    var mean =
+                        scores.reduce(function (s, v) {
+                            return s + v;
+                        }, 0) / len;
+                    var variance =
+                        scores.reduce(function (s, v) {
+                            return s + (v - mean) * (v - mean);
+                        }, 0) / len;
+                    var stddev = Math.sqrt(variance);
+                    return {
+                        median: median,
+                        min: min,
+                        max: max,
+                        stddev: stddev,
+                    };
+                }
+
+                function recomputeRunAllScores(run) {
+                    /* Return a shallow copy of the run with median/min/max/
+                       stddev recomputed from the full scores array (including
+                       the warm-up iteration at index 0).  We detect warm-up
+                       dropping by comparing the recomputed median against the
+                       stored median — if they match, the stored stats already
+                       cover all scores and the run is returned unchanged. */
+                    var changed = false;
+                    var bench = run.benchmarks;
+                    if (!bench) return run;
+
+                    var newBench = {};
+
+                    ["cpu", "memory"].forEach(function (key) {
+                        if (!bench[key]) return;
+                        var b = bench[key];
+                        if (!b.scores || b.scores.length < 2) {
+                            newBench[key] = b;
+                            return;
+                        }
+                        var st = computeStats(b.scores);
+                        if (st.median === b.median) {
+                            newBench[key] = b;
+                            return;
+                        }
+                        changed = true;
+                        newBench[key] = {
+                            tool: b.tool,
+                            iterations: b.iterations,
+                            scores: b.scores,
+                            median: st.median,
+                            min: st.min,
+                            max: st.max,
+                            stddev: st.stddev,
+                            unit: b.unit,
+                        };
+                    });
+
+                    if (bench.disk) {
+                        var diskSrc = bench.disk;
+                        var newDisk = {
+                            tool: diskSrc.tool,
+                            iterations: diskSrc.iterations,
+                            runtime_seconds: diskSrc.runtime_seconds,
+                        };
+                        [
+                            "composite",
+                            "seq_read",
+                            "seq_write",
+                            "rand_read",
+                            "rand_write",
+                        ].forEach(function (sub) {
+                            if (!diskSrc[sub]) return;
+                            var d = diskSrc[sub];
+                            if (!d.scores || d.scores.length < 2) {
+                                newDisk[sub] = d;
+                                return;
+                            }
+                            var st = computeStats(d.scores);
+                            if (st.median === d.median) {
+                                newDisk[sub] = d;
+                                return;
+                            }
+                            changed = true;
+                            newDisk[sub] = {
+                                scores: d.scores,
+                                median: st.median,
+                                min: st.min,
+                                max: st.max,
+                                stddev: st.stddev,
+                                unit: d.unit,
+                            };
+                        });
+                        newBench.disk = newDisk;
+                    }
+
+                    if (bench.compile) {
+                        var c = bench.compile;
+                        if (c.scores && c.scores.length >= 2) {
+                            var st = computeStats(c.scores);
+                            if (st.median !== c.median) {
+                                changed = true;
+                                newBench.compile = {
+                                    tool: c.tool,
+                                    project: c.project,
+                                    project_version: c.project_version,
+                                    iterations: c.iterations,
+                                    parallel_jobs: c.parallel_jobs,
+                                    scores: c.scores,
+                                    median: st.median,
+                                    min: st.min,
+                                    max: st.max,
+                                    stddev: st.stddev,
+                                    unit: c.unit,
+                                };
+                            } else {
+                                newBench.compile = c;
+                            }
+                        } else {
+                            newBench.compile = c;
+                        }
+                    }
+
+                    if (!changed) return run;
+
+                    return {
+                        provider: run.provider,
+                        runner: run.runner,
+                        timestamp: run.timestamp,
+                        benchmarks: newBench,
+                        timing: run.timing,
+                        system: run.system,
+                    };
+                }
+
                 function inferOS(runner, system) {
                     /* Prefer explicit os_version from system info */
                     if (system && system.os_version) {
@@ -828,8 +996,12 @@
                 }
 
                 /* Build the DOM for a single tier section */
-                function renderTierSection(tier, tierIndex) {
-                    var container = document.getElementById("tier-container");
+                function renderTierSection(tier, tierIndex, opts) {
+                    opts = opts || {};
+                    var containerId = opts.containerId || "tier-container";
+                    var prefix = opts.prefix || "";
+                    var showHardware = opts.showHardware !== false;
+                    var container = document.getElementById(containerId);
 
                     var section = document.createElement("div");
                     section.className = "tier-section";
@@ -937,7 +1109,7 @@
                     var cpuChartDiv = document.createElement("div");
                     cpuChartDiv.className = "chart-container";
                     var cpuCanvas = document.createElement("canvas");
-                    cpuCanvas.id = "cpu-bar-tier-" + tierIndex;
+                    cpuCanvas.id = prefix + "cpu-bar-tier-" + tierIndex;
                     cpuChartDiv.appendChild(cpuCanvas);
                     cpuCard.appendChild(cpuChartDiv);
                     chartsGrid.appendChild(cpuCard);
@@ -957,7 +1129,7 @@
                     var memChartDiv = document.createElement("div");
                     memChartDiv.className = "chart-container";
                     var memCanvas = document.createElement("canvas");
-                    memCanvas.id = "mem-bar-tier-" + tierIndex;
+                    memCanvas.id = prefix + "mem-bar-tier-" + tierIndex;
                     memChartDiv.appendChild(memCanvas);
                     memCard.appendChild(memChartDiv);
                     chartsGrid.appendChild(memCard);
@@ -985,7 +1157,7 @@
                         var diskChartDiv = document.createElement("div");
                         diskChartDiv.className = "chart-container";
                         var diskCanvas = document.createElement("canvas");
-                        diskCanvas.id = "disk-bar-tier-" + tierIndex;
+                        diskCanvas.id = prefix + "disk-bar-tier-" + tierIndex;
                         diskChartDiv.appendChild(diskCanvas);
                         diskCard.appendChild(diskChartDiv);
 
@@ -1048,58 +1220,63 @@
                     container.appendChild(section);
 
                     /* Render the charts */
-                    renderCPUBar(sorted, "cpu-bar-tier-" + tierIndex);
-                    renderMemBar(sorted, "mem-bar-tier-" + tierIndex);
+                    renderCPUBar(sorted, prefix + "cpu-bar-tier-" + tierIndex);
+                    renderMemBar(sorted, prefix + "mem-bar-tier-" + tierIndex);
                     if (hasDisk) {
-                        renderDiskBar(sorted, "disk-bar-tier-" + tierIndex);
+                        renderDiskBar(
+                            sorted,
+                            prefix + "disk-bar-tier-" + tierIndex,
+                        );
                     }
 
-                    /* Runner hardware info card */
-                    var infoCard = document.createElement("section");
-                    infoCard.className = "card";
-                    var infoH2 = document.createElement("h2");
-                    infoH2.textContent = "Runner Hardware";
-                    infoCard.appendChild(infoH2);
-                    var infoDesc = document.createElement("p");
-                    infoDesc.className = "section-desc";
-                    infoDesc.innerHTML =
-                        "Processor model reported by each runner. Differences in CPU model explain " +
-                        "performance variations between runners within the same tier.";
-                    infoCard.appendChild(infoDesc);
-                    var infoWrap = document.createElement("div");
-                    infoWrap.style.overflowX = "auto";
-                    var infoTable = document.createElement("table");
-                    infoTable.className = "runner-info-table";
-                    var itHead =
-                        "<thead><tr><th>Provider</th><th>Runner</th><th>Processor</th><th>Arch</th><th>vCPUs</th><th>RAM</th></tr></thead>";
-                    var itBody = "<tbody>";
-                    sorted.forEach(function (run) {
-                        var sys = run.system || {};
-                        itBody +=
-                            '<tr><td><span class="provider-badge">' +
-                            esc(run.provider) +
-                            "</span></td>" +
-                            "<td>" +
-                            esc(run.runner) +
-                            "</td>" +
-                            '<td class="processor-cell">' +
-                            esc(sys.processor || "\u2014") +
-                            "</td>" +
-                            "<td>" +
-                            esc(sys.arch || "\u2014") +
-                            "</td>" +
-                            "<td>" +
-                            (sys.vcpus != null ? sys.vcpus : "\u2014") +
-                            "</td>" +
-                            "<td>" +
-                            fmtRAM(sys.ram_mb) +
-                            "</td></tr>";
-                    });
-                    itBody += "</tbody>";
-                    infoTable.innerHTML = itHead + itBody;
-                    infoWrap.appendChild(infoTable);
-                    infoCard.appendChild(infoWrap);
-                    section.appendChild(infoCard);
+                    if (showHardware) {
+                        /* Runner hardware info card */
+                        var infoCard = document.createElement("section");
+                        infoCard.className = "card";
+                        var infoH2 = document.createElement("h2");
+                        infoH2.textContent = "Runner Hardware";
+                        infoCard.appendChild(infoH2);
+                        var infoDesc = document.createElement("p");
+                        infoDesc.className = "section-desc";
+                        infoDesc.innerHTML =
+                            "Processor model reported by each runner. Differences in CPU model explain " +
+                            "performance variations between runners within the same tier.";
+                        infoCard.appendChild(infoDesc);
+                        var infoWrap = document.createElement("div");
+                        infoWrap.style.overflowX = "auto";
+                        var infoTable = document.createElement("table");
+                        infoTable.className = "runner-info-table";
+                        var itHead =
+                            "<thead><tr><th>Provider</th><th>Runner</th><th>Processor</th><th>Arch</th><th>vCPUs</th><th>RAM</th></tr></thead>";
+                        var itBody = "<tbody>";
+                        sorted.forEach(function (run) {
+                            var sys = run.system || {};
+                            itBody +=
+                                '<tr><td><span class="provider-badge">' +
+                                esc(run.provider) +
+                                "</span></td>" +
+                                "<td>" +
+                                esc(run.runner) +
+                                "</td>" +
+                                '<td class="processor-cell">' +
+                                esc(sys.processor || "\u2014") +
+                                "</td>" +
+                                "<td>" +
+                                esc(sys.arch || "\u2014") +
+                                "</td>" +
+                                "<td>" +
+                                (sys.vcpus != null ? sys.vcpus : "\u2014") +
+                                "</td>" +
+                                "<td>" +
+                                fmtRAM(sys.ram_mb) +
+                                "</td></tr>";
+                        });
+                        itBody += "</tbody>";
+                        infoTable.innerHTML = itHead + itBody;
+                        infoWrap.appendChild(infoTable);
+                        infoCard.appendChild(infoWrap);
+                        section.appendChild(infoCard);
+                    } /* end showHardware */
                 }
 
                 /* ---- Bar Charts ---- */
@@ -2011,6 +2188,45 @@
                     tiers.forEach(function (tier, i) {
                         renderTierSection(tier, i);
                     });
+
+                    /* "All Scores" section — includes warm-up iteration.
+                       Detect by checking whether recomputing stats from the
+                       full scores array produces a different median than the
+                       stored (warm-up-dropped) one. */
+                    var hasWarmup = latest.some(function (r) {
+                        if (
+                            !r.benchmarks ||
+                            !r.benchmarks.cpu ||
+                            !r.benchmarks.cpu.scores ||
+                            r.benchmarks.cpu.scores.length < 2
+                        )
+                            return false;
+                        var st = computeStats(r.benchmarks.cpu.scores);
+                        return st.median !== r.benchmarks.cpu.median;
+                    });
+                    if (hasWarmup) {
+                        document.getElementById(
+                            "all-scores-wrapper",
+                        ).style.display = "";
+                        var allTiers = tiers.map(function (tier) {
+                            return {
+                                key: tier.key,
+                                os: tier.os,
+                                vcpuMin: tier.vcpuMin,
+                                vcpuMax: tier.vcpuMax,
+                                runs: tier.runs.map(recomputeRunAllScores),
+                                ramMin: tier.ramMin,
+                                ramMax: tier.ramMax,
+                            };
+                        });
+                        allTiers.forEach(function (tier, i) {
+                            renderTierSection(tier, i, {
+                                containerId: "tier-container-all",
+                                prefix: "all-",
+                                showHardware: false,
+                            });
+                        });
+                    }
 
                     renderTimingStats(allRuns);
                     renderTimeline(allRuns);
