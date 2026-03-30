@@ -383,6 +383,10 @@
                 overflow-y: auto;
             }
 
+            .timing-stats-card .section-desc {
+                max-width: none;
+            }
+
             .timing-cell {
                 font-variant-numeric: tabular-nums;
                 text-align: right;
@@ -658,6 +662,28 @@
                         </p>
                     </section>
                     <div id="tier-container-all"></div>
+                </div>
+
+                <!-- GitHub Actions vs CircleCI comparison -->
+                <div id="comparison-wrapper" style="display: none">
+                    <section class="card about-card">
+                        <h2>
+                            &#9878; GitHub Actions vs CircleCI Machine Runners
+                        </h2>
+                        <p class="section-desc">
+                            A direct head-to-head comparison between
+                            <strong>GitHub Actions</strong> and
+                            <strong>CircleCI machine</strong> runners. Only OS
+                            tiers where both providers have at least one runner
+                            are shown, so you are always comparing like with
+                            like. CircleCI Docker-based resource classes are
+                            excluded&mdash;only dedicated VM runners (<code
+                                >machine.*</code
+                            >
+                            and <code>m4pro.*</code>) are included.
+                        </p>
+                    </section>
+                    <div id="tier-container-comparison"></div>
                 </div>
 
                 <!-- Run Timing Stats table -->
@@ -2261,6 +2287,9 @@
                             "tier-container-all",
                         ).innerHTML = "";
                         document.getElementById(
+                            "tier-container-comparison",
+                        ).innerHTML = "";
+                        document.getElementById(
                             "timing-stats-container",
                         ).innerHTML = "";
 
@@ -2303,6 +2332,46 @@
                         } else {
                             document.getElementById(
                                 "all-scores-wrapper",
+                            ).style.display = "none";
+                        }
+
+                        /* GitHub Actions vs CircleCI comparison */
+                        var comparisonRuns = latest.filter(function (r) {
+                            if (r.provider === "github-actions") return true;
+                            if (r.provider === "circleci") {
+                                var rn = r.runner.toLowerCase();
+                                return (
+                                    rn.indexOf("machine.") === 0 ||
+                                    rn.indexOf("m4pro.") === 0
+                                );
+                            }
+                            return false;
+                        });
+                        var compTiers = groupByTier(comparisonRuns);
+                        /* Only keep tiers that have runs from both providers */
+                        compTiers = compTiers.filter(function (tier) {
+                            var hasGHA = tier.runs.some(function (r) {
+                                return r.provider === "github-actions";
+                            });
+                            var hasCircle = tier.runs.some(function (r) {
+                                return r.provider === "circleci";
+                            });
+                            return hasGHA && hasCircle;
+                        });
+                        if (compTiers.length > 0) {
+                            document.getElementById(
+                                "comparison-wrapper",
+                            ).style.display = "";
+                            compTiers.forEach(function (tier, i) {
+                                renderTierSection(tier, i, {
+                                    containerId: "tier-container-comparison",
+                                    prefix: "cmp-",
+                                    showHardware: true,
+                                });
+                            });
+                        } else {
+                            document.getElementById(
+                                "comparison-wrapper",
                             ).style.display = "none";
                         }
 
