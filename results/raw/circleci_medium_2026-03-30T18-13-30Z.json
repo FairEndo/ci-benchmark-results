@@ -1,0 +1,198 @@
+{
+  "provider": "circleci",
+  "runner": "medium",
+  "timestamp": "2026-03-30T18:13:30Z",
+  "benchmarks": {
+    "cpu": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        355.27,
+        326.02,
+        338.35,
+        388.05,
+        386.70
+      ],
+      "median": 355.27,
+      "min": 326.02,
+      "max": 388.05,
+      "stddev": 25.06,
+      "unit": "events/sec"
+    },
+    "memory": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        4249.07,
+        5029.68,
+        5151.47,
+        5595.90,
+        5112.40
+      ],
+      "median": 5112.40,
+      "min": 4249.07,
+      "max": 5595.90,
+      "stddev": 436.26,
+      "unit": "MiB/sec"
+    },
+    "disk": {
+      "tool": "fio",
+      "iterations": 5,
+      "runtime_seconds": 5,
+      "composite": {
+        "scores": [
+          3928.67,
+          4231.05,
+          3489.10,
+          4255.68,
+          3467.35
+        ],
+        "median": 3928.67,
+        "min": 3467.35,
+        "max": 4255.68,
+        "stddev": 343.41,
+        "unit": "score"
+      },
+      "seq_read": {
+        "scores": [
+          1865.23,
+          1827.23,
+          1235.35,
+          1435.51,
+          1349.93
+        ],
+        "median": 1435.51,
+        "min": 1235.35,
+        "max": 1865.23,
+        "stddev": 256.16,
+        "unit": "MB/s"
+      },
+      "seq_write": {
+        "scores": [
+          845.83,
+          893.62,
+          585.88,
+          818.24,
+          804.04
+        ],
+        "median": 818.24,
+        "min": 585.88,
+        "max": 893.62,
+        "stddev": 106.31,
+        "unit": "MB/s"
+      },
+      "rand_read": {
+        "scores": [
+          8617.08,
+          9163.97,
+          8150.17,
+          9779.84,
+          9198.36
+        ],
+        "median": 9163.97,
+        "min": 8150.17,
+        "max": 9779.84,
+        "stddev": 555.26,
+        "unit": "IOPS"
+      },
+      "rand_write": {
+        "scores": [
+          17522.90,
+          21417.12,
+          25123.98,
+          28553.49,
+          14477.51
+        ],
+        "median": 21417.12,
+        "min": 14477.51,
+        "max": 28553.49,
+        "stddev": 5059.48,
+        "unit": "IOPS"
+      }
+    },
+    "compile": {
+      "tool": "make",
+      "project": "redis",
+      "project_version": "7.2.7",
+      "iterations": 5,
+      "parallel_jobs": 4,
+      "scores": [
+        61.06,
+        56.00,
+        57.84,
+        57.63,
+        57.93
+      ],
+      "median": 57.84,
+      "min": 56.00,
+      "max": 61.06,
+      "stddev": 1.64,
+      "unit": "seconds"
+    },
+    "network": {
+      "tool": "curl",
+      "test_url": "https://speed.cloudflare.com/__down?bytes=26214400",
+      "download_bytes": 26214400,
+      "iterations": 5,
+      "composite": {
+        "scores": [
+          83.47,
+          97.22,
+          116.12,
+          103.03,
+          67.95
+        ],
+        "median": 97.22,
+        "min": 67.95,
+        "max": 116.12,
+        "stddev": 16.55,
+        "unit": "MB/s"
+      },
+      "download": {
+        "scores": [
+          83.47,
+          97.22,
+          116.12,
+          103.03,
+          67.95
+        ],
+        "median": 97.22,
+        "min": 67.95,
+        "max": 116.12,
+        "stddev": 16.55,
+        "unit": "MB/s"
+      },
+      "latency": {
+        "scores": [
+          142.00,
+          94.71,
+          101.00,
+          147.34,
+          89.87
+        ],
+        "median": 101.00,
+        "min": 89.87,
+        "max": 147.34,
+        "stddev": 24.55,
+        "unit": "ms"
+      }
+    }
+  },
+  "timing": {
+    "trigger_time": "2026-03-30T18:13:10.999Z",
+    "job_started_at": "2026-03-30T18:13:17Z",
+    "bench_started_at": "2026-03-30T18:13:30Z",
+    "queue_seconds": 7,
+    "setup_seconds": 13,
+    "total_seconds": 20
+  },
+  "system": {
+    "os": "Ubuntu",
+    "os_version": "Ubuntu 24.04.4 LTS",
+    "arch": "x86_64",
+    "processor": "Intel(R) Xeon(R) Platinum 8124M CPU @ 3.00GHz",
+    "vcpus": 36,
+    "ram_mb": 4096,
+    "load_avg": "27.27, 18.81, 13.15"
+  }
+}

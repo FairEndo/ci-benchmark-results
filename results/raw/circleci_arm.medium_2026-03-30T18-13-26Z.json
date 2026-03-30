@@ -1,0 +1,198 @@
+{
+  "provider": "circleci",
+  "runner": "arm.medium",
+  "timestamp": "2026-03-30T18:13:26Z",
+  "benchmarks": {
+    "cpu": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        1070.66,
+        1068.16,
+        1067.65,
+        1068.93,
+        1069.81
+      ],
+      "median": 1068.93,
+      "min": 1067.65,
+      "max": 1070.66,
+      "stddev": 1.09,
+      "unit": "events/sec"
+    },
+    "memory": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        3792.03,
+        3799.58,
+        3827.09,
+        3824.72,
+        3816.82
+      ],
+      "median": 3816.82,
+      "min": 3792.03,
+      "max": 3827.09,
+      "stddev": 13.90,
+      "unit": "MiB/sec"
+    },
+    "disk": {
+      "tool": "fio",
+      "iterations": 5,
+      "runtime_seconds": 5,
+      "composite": {
+        "scores": [
+          5687.00,
+          5528.48,
+          4983.01,
+          5152.02,
+          5645.19
+        ],
+        "median": 5528.48,
+        "min": 4983.01,
+        "max": 5687.00,
+        "stddev": 280.84,
+        "unit": "score"
+      },
+      "seq_read": {
+        "scores": [
+          2394.52,
+          2463.71,
+          2232.35,
+          2213.16,
+          2446.31
+        ],
+        "median": 2394.52,
+        "min": 2213.16,
+        "max": 2463.71,
+        "stddev": 106.54,
+        "unit": "MB/s"
+      },
+      "seq_write": {
+        "scores": [
+          1259.95,
+          1188.76,
+          1002.40,
+          1110.38,
+          1250.35
+        ],
+        "median": 1188.76,
+        "min": 1002.40,
+        "max": 1259.95,
+        "stddev": 96.18,
+        "unit": "MB/s"
+      },
+      "rand_read": {
+        "scores": [
+          10757.65,
+          10441.71,
+          9777.84,
+          9592.08,
+          10547.49
+        ],
+        "median": 10441.71,
+        "min": 9592.08,
+        "max": 10757.65,
+        "stddev": 455.02,
+        "unit": "IOPS"
+      },
+      "rand_write": {
+        "scores": [
+          32228.80,
+          30547.00,
+          28178.76,
+          29889.22,
+          31479.10
+        ],
+        "median": 30547.00,
+        "min": 28178.76,
+        "max": 32228.80,
+        "stddev": 1393.16,
+        "unit": "IOPS"
+      }
+    },
+    "compile": {
+      "tool": "make",
+      "project": "redis",
+      "project_version": "7.2.7",
+      "iterations": 5,
+      "parallel_jobs": 2,
+      "scores": [
+        105.17,
+        104.48,
+        104.60,
+        104.37,
+        104.84
+      ],
+      "median": 104.60,
+      "min": 104.37,
+      "max": 105.17,
+      "stddev": 0.29,
+      "unit": "seconds"
+    },
+    "network": {
+      "tool": "curl",
+      "test_url": "https://speed.cloudflare.com/__down?bytes=26214400",
+      "download_bytes": 26214400,
+      "iterations": 5,
+      "composite": {
+        "scores": [
+          86.17,
+          58.24,
+          62.89,
+          42.74,
+          113.20
+        ],
+        "median": 62.89,
+        "min": 42.74,
+        "max": 113.20,
+        "stddev": 24.60,
+        "unit": "MB/s"
+      },
+      "download": {
+        "scores": [
+          86.17,
+          58.24,
+          62.89,
+          42.74,
+          113.20
+        ],
+        "median": 62.89,
+        "min": 42.74,
+        "max": 113.20,
+        "stddev": 24.60,
+        "unit": "MB/s"
+      },
+      "latency": {
+        "scores": [
+          101.54,
+          111.76,
+          115.92,
+          99.41,
+          123.32
+        ],
+        "median": 111.76,
+        "min": 99.41,
+        "max": 123.32,
+        "stddev": 8.93,
+        "unit": "ms"
+      }
+    }
+  },
+  "timing": {
+    "trigger_time": "2026-03-30T18:13:10.999Z",
+    "job_started_at": "2026-03-30T18:13:15Z",
+    "bench_started_at": "2026-03-30T18:13:26Z",
+    "queue_seconds": 5,
+    "setup_seconds": 11,
+    "total_seconds": 16
+  },
+  "system": {
+    "os": "Ubuntu",
+    "os_version": "Ubuntu 24.04.4 LTS",
+    "arch": "aarch64",
+    "processor": "unknown",
+    "vcpus": 32,
+    "ram_mb": 8192,
+    "load_avg": "4.98, 8.59, 8.77"
+  }
+}
