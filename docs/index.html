@@ -650,7 +650,7 @@
                     <span class="filter-label">Filters:</span>
                     <label>
                         <input type="checkbox" id="filter-warmup" />
-                        Hide warm-up runs
+                        Show warm-up runs
                     </label>
                     <span class="filter-count" id="filter-count"></span>
                 </div>
@@ -2514,11 +2514,11 @@
                     /* Wire up checkbox */
                     var checkbox = document.getElementById("filter-warmup");
                     checkbox.addEventListener("change", function () {
-                        renderDashboard(checkbox.checked);
+                        renderDashboard(!checkbox.checked);
                     });
 
-                    /* Initial render */
-                    renderDashboard(false);
+                    /* Initial render — hide warm-up by default */
+                    renderDashboard(true);
 
                     /* Scroll-spy: highlight active nav link */
                     var navSections = [
