@@ -1,0 +1,234 @@
+{
+  "provider": "github-actions",
+  "runner": "macos-14",
+  "timestamp": "2026-03-31T01:30:40Z",
+  "benchmarks": {
+    "cpu": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        9732339.70,
+        9724810.42,
+        9950815.57,
+        10006286.67,
+        9119944.70
+      ],
+      "median": 9732339.70,
+      "min": 9119944.70,
+      "max": 10006286.67,
+      "stddev": 314519.20,
+      "unit": "events/sec"
+    },
+    "memory": {
+      "tool": "sysbench",
+      "iterations": 5,
+      "scores": [
+        5574.15,
+        5861.92,
+        6014.74,
+        5944.40,
+        5993.04
+      ],
+      "median": 5944.40,
+      "min": 5574.15,
+      "max": 6014.74,
+      "stddev": 160.58,
+      "unit": "MiB/sec"
+    },
+    "disk": {
+      "tool": "fio",
+      "iterations": 5,
+      "runtime_seconds": 5,
+      "composite": {
+        "scores": [
+          96024.35,
+          96896.99,
+          97527.37,
+          96212.05,
+          89596.19
+        ],
+        "median": 96212.05,
+        "min": 89596.19,
+        "max": 97527.37,
+        "stddev": 2877.14,
+        "unit": "score"
+      },
+      "seq_read": {
+        "scores": [
+          15652.87,
+          15386.00,
+          15038.79,
+          14793.04,
+          14076.78
+        ],
+        "median": 15038.79,
+        "min": 14076.78,
+        "max": 15652.87,
+        "stddev": 542.47,
+        "unit": "MB/s"
+      },
+      "seq_write": {
+        "scores": [
+          14756.25,
+          15096.58,
+          15336.73,
+          15199.96,
+          14552.09
+        ],
+        "median": 15096.58,
+        "min": 14552.09,
+        "max": 15336.73,
+        "stddev": 290.54,
+        "unit": "MB/s"
+      },
+      "rand_read": {
+        "scores": [
+          889586.20,
+          906457.20,
+          906029.60,
+          922749.00,
+          822740.80
+        ],
+        "median": 906029.60,
+        "min": 822740.80,
+        "max": 922749.00,
+        "stddev": 34994.48,
+        "unit": "IOPS"
+      },
+      "rand_write": {
+        "scores": [
+          413778.00,
+          418687.00,
+          432930.40,
+          412985.20,
+          382354.73
+        ],
+        "median": 413778.00,
+        "min": 382354.73,
+        "max": 432930.40,
+        "stddev": 16526.73,
+        "unit": "IOPS"
+      }
+    },
+    "compile": {
+      "tool": "make",
+      "project": "redis",
+      "project_version": "7.2.7",
+      "iterations": 5,
+      "parallel_jobs": 3,
+      "scores": [
+        20.01,
+        17.73,
+        17.98,
+        18.12,
+        16.92
+      ],
+      "median": 17.98,
+      "min": 16.92,
+      "max": 20.01,
+      "stddev": 1.02,
+      "unit": "seconds"
+    },
+    "network": {
+      "tool": "curl",
+      "test_url": "https://speed.cloudflare.com/__down?bytes=26214400",
+      "download_bytes": 26214400,
+      "iterations": 5,
+      "composite": {
+        "scores": [
+          61.10,
+          104.19,
+          79.45,
+          96.03,
+          107.25
+        ],
+        "median": 96.03,
+        "min": 61.10,
+        "max": 107.25,
+        "stddev": 17.21,
+        "unit": "MB/s"
+      },
+      "download": {
+        "scores": [
+          61.10,
+          104.19,
+          79.45,
+          96.03,
+          107.25
+        ],
+        "median": 96.03,
+        "min": 61.10,
+        "max": 107.25,
+        "stddev": 17.21,
+        "unit": "MB/s"
+      },
+      "latency": {
+        "scores": [
+          115.56,
+          135.79,
+          74.79,
+          69.93,
+          62.85
+        ],
+        "median": 74.79,
+        "min": 62.85,
+        "max": 135.79,
+        "stddev": 28.65,
+        "unit": "ms"
+      }
+    },
+    "threading": {
+      "tool": "hyperfine",
+      "workload": "sysbench-cpu",
+      "cpu_max_prime": 20000,
+      "max_threads": 3,
+      "warmup": 1,
+      "runs": 3,
+      "results": [
+        {
+          "threads": 1,
+          "mean": 10.007,
+          "stddev": 0,
+          "median": 10.007,
+          "min": 10.006,
+          "max": 10.007
+        },
+        {
+          "threads": 2,
+          "mean": 10.008,
+          "stddev": 0,
+          "median": 10.008,
+          "min": 10.007,
+          "max": 10.008
+        },
+        {
+          "threads": 3,
+          "mean": 10.007,
+          "stddev": 0,
+          "median": 10.007,
+          "min": 10.006,
+          "max": 10.007
+        }
+      ],
+      "scaling_factor": 1,
+      "unit": "seconds"
+    }
+  },
+  "timing": {
+    "trigger_time": "2026-03-31T01:30:21Z",
+    "job_started_at": "2026-03-31T01:30:25Z",
+    "bench_started_at": "2026-03-31T01:30:39Z",
+    "queue_seconds": 4,
+    "setup_seconds": 14,
+    "total_seconds": 18
+  },
+  "system": {
+    "os": "macOS",
+    "os_version": "macOS 14.8.4",
+    "arch": "arm64",
+    "processor": "Apple M1 (Virtual)",
+    "vcpus": 3,
+    "ram_mb": 7168,
+    "load_avg": "1.13 0.91 2.06"
+  }
+}
