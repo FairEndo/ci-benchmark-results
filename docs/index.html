@@ -636,6 +636,12 @@
                         >GHA vs CircleCI</a
                     >
                     <a
+                        href="#gen-comparison-wrapper"
+                        data-nav="gen-comparison-wrapper"
+                        class="nav-conditional"
+                        >Gen1 vs Gen2 vs GHA</a
+                    >
+                    <a
                         href="#timing-stats-container"
                         data-nav="timing-stats-container"
                         >Timing</a
@@ -777,6 +783,104 @@
                         </p>
                     </section>
                     <div id="tier-container-comparison"></div>
+                </div>
+
+                <!-- Gen1 vs Gen2 vs GitHub Actions comparison -->
+                <div id="gen-comparison-wrapper" style="display: none">
+                    <section class="card about-card">
+                        <h2>&#128200; Gen 1 vs Gen 2 vs GitHub Actions</h2>
+                        <p class="section-desc">
+                            A three-way comparison between
+                            <strong>CircleCI Gen 1</strong> (Docker resource
+                            classes: <code>medium</code>, <code>large</code>,
+                            <code>xlarge</code>, <code>arm.*</code>),
+                            <strong>CircleCI Gen 2</strong> (dedicated VM
+                            runners: <code>machine.*</code>,
+                            <code>m4pro.*</code>, and any runner with
+                            <code>gen2</code> in its name), and
+                            <strong>GitHub Actions</strong> runners. Only OS
+                            tiers where at least two of the three groups have
+                            runners are shown.
+                        </p>
+                        <div
+                            style="
+                                display: flex;
+                                gap: 18px;
+                                margin-top: 10px;
+                                flex-wrap: wrap;
+                                align-items: center;
+                            "
+                        >
+                            <span
+                                style="
+                                    font-size: 0.85em;
+                                    color: var(--text-secondary);
+                                "
+                                >Legend:</span
+                            >
+                            <span
+                                style="
+                                    display: inline-flex;
+                                    align-items: center;
+                                    gap: 6px;
+                                "
+                            >
+                                <span
+                                    style="
+                                        width: 14px;
+                                        height: 14px;
+                                        border-radius: 3px;
+                                        background: #e63946;
+                                        display: inline-block;
+                                    "
+                                ></span>
+                                <span style="color: #e0e0e0; font-size: 0.85em"
+                                    >Gen 1 (CircleCI Docker)</span
+                                >
+                            </span>
+                            <span
+                                style="
+                                    display: inline-flex;
+                                    align-items: center;
+                                    gap: 6px;
+                                "
+                            >
+                                <span
+                                    style="
+                                        width: 14px;
+                                        height: 14px;
+                                        border-radius: 3px;
+                                        background: #2a9d8f;
+                                        display: inline-block;
+                                    "
+                                ></span>
+                                <span style="color: #e0e0e0; font-size: 0.85em"
+                                    >Gen 2 (CircleCI VM)</span
+                                >
+                            </span>
+                            <span
+                                style="
+                                    display: inline-flex;
+                                    align-items: center;
+                                    gap: 6px;
+                                "
+                            >
+                                <span
+                                    style="
+                                        width: 14px;
+                                        height: 14px;
+                                        border-radius: 3px;
+                                        background: #4361ee;
+                                        display: inline-block;
+                                    "
+                                ></span>
+                                <span style="color: #e0e0e0; font-size: 0.85em"
+                                    >GitHub Actions</span
+                                >
+                            </span>
+                        </div>
+                    </section>
+                    <div id="tier-container-gen-comparison"></div>
                 </div>
 
                 <!-- Run Timing Stats table -->
@@ -1078,6 +1182,39 @@
 
                 function chartColors(i) {
                     return PALETTE[i % PALETTE.length];
+                }
+
+                /* Generation-group colors for Gen1 vs Gen2 vs GHA chart */
+                var GEN_COLORS = {
+                    gen1: "#e63946",
+                    gen2: "#2a9d8f",
+                    gha: "#4361ee",
+                };
+                var GEN_LABELS = {
+                    gen1: "Gen 1",
+                    gen2: "Gen 2",
+                    gha: "GHA",
+                };
+
+                function genGroupColor(run) {
+                    if (run._genGroup && GEN_COLORS[run._genGroup]) {
+                        return GEN_COLORS[run._genGroup];
+                    }
+                    return null;
+                }
+
+                function genShortLabel(run) {
+                    if (run._genGroup && GEN_LABELS[run._genGroup]) {
+                        return (
+                            "[" +
+                            GEN_LABELS[run._genGroup] +
+                            "] " +
+                            run.provider +
+                            " / " +
+                            run.runner
+                        );
+                    }
+                    return shortLabel(run);
                 }
 
                 /* Keep only the latest run per provider+runner combo */
@@ -1526,11 +1663,15 @@
                             run.benchmarks && run.benchmarks.cpu
                                 ? run.benchmarks.cpu
                                 : null;
-                        labels.push(shortLabel(run));
+                        labels.push(
+                            run._genGroup
+                                ? genShortLabel(run)
+                                : shortLabel(run),
+                        );
                         medians.push(cpu ? cpu.median : 0);
                         mins.push(cpu ? cpu.median - cpu.min : 0);
                         maxs.push(cpu ? cpu.max - cpu.median : 0);
-                        colors.push(chartColors(i));
+                        colors.push(genGroupColor(run) || chartColors(i));
                     });
 
                     var canvas = document.getElementById(canvasId);
@@ -1644,11 +1785,15 @@
 
                     sorted.forEach(function (run, i) {
                         var mem = run.benchmarks.memory;
-                        labels.push(shortLabel(run));
+                        labels.push(
+                            run._genGroup
+                                ? genShortLabel(run)
+                                : shortLabel(run),
+                        );
                         medians.push(mem.median);
                         mins.push(mem.median - mem.min);
                         maxs.push(mem.max - mem.median);
-                        colors.push(chartColors(i));
+                        colors.push(genGroupColor(run) || chartColors(i));
                     });
 
                     var ctx = canvas.getContext("2d");
@@ -1763,11 +1908,15 @@
 
                     sorted.forEach(function (run, i) {
                         var comp = run.benchmarks.disk.composite;
-                        labels.push(shortLabel(run));
+                        labels.push(
+                            run._genGroup
+                                ? genShortLabel(run)
+                                : shortLabel(run),
+                        );
                         medians.push(comp.median);
                         mins.push(comp.median - comp.min);
                         maxs.push(comp.max - comp.median);
-                        colors.push(chartColors(i));
+                        colors.push(genGroupColor(run) || chartColors(i));
                     });
 
                     var ctx = canvas.getContext("2d");
@@ -2383,6 +2532,9 @@
                             "tier-container-comparison",
                         ).innerHTML = "";
                         document.getElementById(
+                            "tier-container-gen-comparison",
+                        ).innerHTML = "";
+                        document.getElementById(
                             "timing-stats-container",
                         ).innerHTML = "";
 
@@ -2468,6 +2620,63 @@
                             ).style.display = "none";
                         }
 
+                        /* Gen1 vs Gen2 vs GitHub Actions comparison */
+                        var genLabeledRuns = latest
+                            .map(function (r) {
+                                var rn = r.runner.toLowerCase();
+                                var genGroup = null;
+                                if (r.provider === "github-actions") {
+                                    genGroup = "gha";
+                                } else if (r.provider === "circleci") {
+                                    if (
+                                        rn.indexOf("gen2") >= 0 ||
+                                        rn.indexOf("machine.") === 0 ||
+                                        rn.indexOf("m4pro.") === 0
+                                    ) {
+                                        genGroup = "gen2";
+                                    } else {
+                                        genGroup = "gen1";
+                                    }
+                                }
+                                if (!genGroup) return null;
+                                var copy = {};
+                                for (var k in r) {
+                                    if (r.hasOwnProperty(k)) copy[k] = r[k];
+                                }
+                                copy._genGroup = genGroup;
+                                return copy;
+                            })
+                            .filter(function (r) {
+                                return r !== null;
+                            });
+
+                        var genTiers = groupByTier(genLabeledRuns);
+                        /* Only keep tiers with at least 2 of the 3 groups */
+                        genTiers = genTiers.filter(function (tier) {
+                            var groups = {};
+                            tier.runs.forEach(function (r) {
+                                groups[r._genGroup] = true;
+                            });
+                            return Object.keys(groups).length >= 2;
+                        });
+                        if (genTiers.length > 0) {
+                            document.getElementById(
+                                "gen-comparison-wrapper",
+                            ).style.display = "";
+                            genTiers.forEach(function (tier, i) {
+                                renderTierSection(tier, i, {
+                                    containerId:
+                                        "tier-container-gen-comparison",
+                                    prefix: "gen-",
+                                    showHardware: true,
+                                });
+                            });
+                        } else {
+                            document.getElementById(
+                                "gen-comparison-wrapper",
+                            ).style.display = "none";
+                        }
+
                         renderTimingStats(filteredRuns);
                         renderTimeline(filteredRuns);
                         renderFooter(filteredRuns, tiers.length);
@@ -2526,6 +2735,7 @@
                         "tier-container",
                         "all-scores-wrapper",
                         "comparison-wrapper",
+                        "gen-comparison-wrapper",
                         "timing-stats-container",
                         "timeline-section",
                     ];
